@@ -5,216 +5,916 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Zyqen Admin Dashboard</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    :root{
+      --bg:#070707;
+      --panel:rgba(255,255,255,.055);
+      --panel2:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.1);
+      --gold:#ffd86b;
+      --gold2:#b8860b;
+      --text:#fff;
+      --muted:#aaa;
+      --danger:#ff5c5c;
+      --radius:24px;
+    }
+
     body{
-      margin:0;
       font-family:"Poppins",sans-serif;
-      background:#0b0b0b;
-      color:#fff;
+      background:
+        radial-gradient(circle at top left,rgba(255,216,107,.14),transparent 32%),
+        radial-gradient(circle at bottom right,rgba(184,134,11,.12),transparent 34%),
+        var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
     }
 
-    header{
-      padding:20px;
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+      background-size:70px 70px;
+      mask-image:linear-gradient(to bottom,rgba(0,0,0,.8),transparent);
+      pointer-events:none;
+      z-index:-1;
+    }
+
+    .dashboard{
+      display:grid;
+      grid-template-columns:280px 1fr;
+      min-height:100vh;
+    }
+
+    aside{
+      border-right:1px solid var(--line);
+      background:rgba(0,0,0,.25);
+      backdrop-filter:blur(22px);
+      padding:24px;
       display:flex;
+      flex-direction:column;
       justify-content:space-between;
-      align-items:center;
-      background:rgba(255,215,120,.05);
-      border-bottom:1px solid rgba(255,215,120,.2);
+      position:sticky;
+      top:0;
+      height:100vh;
     }
 
-    h1{
-      font-size:20px;
-      color:#f8d57a;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:42px;
+    }
+
+    .brand-icon{
+      width:54px;
+      height:54px;
+      border-radius:50%;
+      border:2px solid var(--gold);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--gold);
+      font-size:28px;
+      font-weight:700;
+      box-shadow:0 0 28px rgba(255,216,107,.2);
+    }
+
+    .brand h1{
+      font-size:24px;
+      line-height:1;
+    }
+
+    .brand span{
+      color:var(--gold);
+      font-size:11px;
+      letter-spacing:4px;
+      font-weight:600;
+    }
+
+    nav{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .nav-item{
+      height:54px;
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:0 16px;
+      color:#cfcfcf;
+      font-size:14px;
+      background:transparent;
+      border:1px solid transparent;
+    }
+
+    .nav-item.active{
+      color:var(--gold);
+      background:linear-gradient(90deg,rgba(255,216,107,.18),rgba(255,216,107,.04));
+      border-color:rgba(255,216,107,.18);
+    }
+
+    .admin-box{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      background:rgba(255,255,255,.04);
+      margin-bottom:14px;
+    }
+
+    .admin-name{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:600;
+    }
+
+    .admin-mini{
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      border:1px solid var(--gold);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--gold);
+      font-weight:700;
+    }
+
+    .admin-email{
+      font-size:11px;
+      color:var(--muted);
+      margin-top:6px;
+      word-break:break-all;
     }
 
     button{
       cursor:pointer;
       border:none;
-      padding:10px 15px;
-      border-radius:10px;
-      font-weight:600;
+      font-family:inherit;
     }
 
     .logout{
-      background:#f8d57a;
-      color:#111;
+      width:100%;
+      height:52px;
+      border-radius:16px;
+      background:rgba(255,255,255,.04);
+      color:#fff;
+      border:1px solid var(--line);
+      font-weight:600;
+      transition:.25s;
     }
 
-    .container{
-      display:grid;
-      grid-template-columns:1fr 1fr;
+    .logout:hover{
+      background:rgba(255,92,92,.12);
+      border-color:rgba(255,92,92,.3);
+      color:#ffb3b3;
+    }
+
+    main{
+      padding:32px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
       gap:20px;
-      padding:20px;
+      margin-bottom:32px;
+    }
+
+    .page-title h2{
+      font-size:30px;
+      line-height:1.1;
+    }
+
+    .page-title p{
+      color:var(--muted);
+      margin-top:8px;
+    }
+
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .search{
+      width:310px;
+      height:52px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.25);
+      color:#fff;
+      padding:0 18px;
+      outline:none;
+    }
+
+    .mobile-menu{
+      display:none;
+      width:48px;
+      height:48px;
+      border-radius:14px;
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      border:1px solid var(--line);
+      font-size:22px;
+    }
+
+    .content-grid{
+      display:grid;
+      grid-template-columns:minmax(320px,420px) 1fr;
+      gap:22px;
+      align-items:start;
     }
 
     .card{
-      background:rgba(255,255,255,.05);
-      padding:20px;
-      border-radius:15px;
-      border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.035));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      backdrop-filter:blur(22px);
+      box-shadow:0 24px 80px rgba(0,0,0,.25);
+      overflow:hidden;
+    }
+
+    .card-header{
+      padding:24px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .card-title{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:20px;
+      font-weight:700;
+    }
+
+    .badge{
+      padding:4px 9px;
+      border-radius:999px;
+      background:rgba(255,216,107,.16);
+      color:var(--gold);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .form{
+      padding:24px;
+    }
+
+    label{
+      display:block;
+      font-size:13px;
+      margin-bottom:8px;
+      color:#eee;
+      font-weight:500;
+    }
+
+    .field{
+      margin-bottom:20px;
     }
 
     input{
       width:100%;
-      padding:10px;
-      margin:8px 0;
-      border-radius:10px;
-      border:none;
+      height:52px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.11);
+      background:rgba(0,0,0,.25);
+      color:white;
       outline:none;
+      padding:0 15px;
+      font-family:inherit;
+      transition:.2s;
+    }
+
+    input:focus{
+      border-color:rgba(255,216,107,.55);
+      box-shadow:0 0 0 4px rgba(255,216,107,.08);
+    }
+
+    input::placeholder{
+      color:#777;
     }
 
     .add{
-      background:#f8d57a;
-      color:#111;
       width:100%;
+      height:56px;
+      border-radius:16px;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      color:#111;
+      font-size:15px;
+      font-weight:800;
+      transition:.25s;
+      box-shadow:0 14px 34px rgba(255,216,107,.2);
+    }
+
+    .add:hover{
+      transform:translateY(-2px);
+      box-shadow:0 18px 42px rgba(255,216,107,.3);
+    }
+
+    .hint{
+      margin-top:18px;
+      color:#8d8d8d;
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    .products-list{
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      max-height:620px;
+      overflow:auto;
+    }
+
+    .products-list::-webkit-scrollbar{
+      width:6px;
+    }
+
+    .products-list::-webkit-scrollbar-thumb{
+      background:rgba(255,216,107,.35);
+      border-radius:999px;
     }
 
     .product{
-      display:flex;
-      justify-content:space-between;
-      padding:10px;
-      margin-top:10px;
-      background:rgba(255,255,255,.05);
-      border-radius:10px;
+      display:grid;
+      grid-template-columns:70px 1fr auto;
+      align-items:center;
+      gap:16px;
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.07);
+      transition:.25s;
     }
 
-    .delete{
-      background:#ff4d4d;
+    .product:hover{
+      background:rgba(255,255,255,.075);
+      transform:translateY(-2px);
+    }
+
+    .thumb{
+      width:70px;
+      height:70px;
+      border-radius:16px;
+      object-fit:cover;
+      background:#111;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .product strong{
+      display:block;
+      font-size:16px;
+      margin-bottom:5px;
+    }
+
+    .product span{
+      color:var(--gold);
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .product small{
+      display:block;
+      color:#888;
+      margin-top:4px;
+      max-width:360px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .product-actions{
+      display:flex;
+      gap:10px;
+    }
+
+    .icon-btn{
+      width:44px;
+      height:44px;
+      border-radius:14px;
       color:#fff;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      transition:.2s;
+      font-size:17px;
+    }
+
+    .icon-btn:hover{
+      background:rgba(255,216,107,.12);
+      color:var(--gold);
+    }
+
+    .delete:hover{
+      background:rgba(255,92,92,.14);
+      color:#ff8f8f;
+      border-color:rgba(255,92,92,.25);
+    }
+
+    .empty{
+      text-align:center;
+      padding:50px 20px;
+      color:#999;
+    }
+
+    .toast{
+      position:fixed;
+      right:24px;
+      bottom:24px;
+      background:rgba(10,10,10,.9);
+      border:1px solid rgba(255,216,107,.25);
+      color:#fff;
+      padding:14px 18px;
+      border-radius:16px;
+      box-shadow:0 18px 50px rgba(0,0,0,.45);
+      transform:translateY(20px);
+      opacity:0;
+      pointer-events:none;
+      transition:.25s;
+      z-index:999;
+    }
+
+    .toast.show{
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    .bottom-nav{
+      display:none;
+    }
+
+    @media(max-width:1100px){
+      .dashboard{
+        grid-template-columns:1fr;
+      }
+
+      aside{
+        display:none;
+      }
+
+      main{
+        padding:22px;
+      }
+
+      .mobile-menu{
+        display:block;
+      }
+
+      .content-grid{
+        grid-template-columns:1fr;
+      }
+
+      .search{
+        width:240px;
+      }
+    }
+
+    @media(max-width:720px){
+      main{
+        padding:18px 14px 92px;
+      }
+
+      .topbar{
+        align-items:flex-start;
+        margin-bottom:22px;
+      }
+
+      .page-title h2{
+        font-size:25px;
+      }
+
+      .page-title p{
+        font-size:13px;
+      }
+
+      .top-actions{
+        display:none;
+      }
+
+      .card{
+        border-radius:22px;
+      }
+
+      .card-header{
+        padding:20px;
+      }
+
+      .form{
+        padding:20px;
+      }
+
+      .products-list{
+        padding:12px;
+        max-height:none;
+      }
+
+      .product{
+        grid-template-columns:58px 1fr auto;
+        gap:12px;
+        padding:12px;
+      }
+
+      .thumb{
+        width:58px;
+        height:58px;
+        border-radius:14px;
+      }
+
+      .product strong{
+        font-size:14px;
+      }
+
+      .product span{
+        font-size:12px;
+      }
+
+      .product small{
+        display:none;
+      }
+
+      .icon-btn{
+        width:38px;
+        height:38px;
+        border-radius:12px;
+      }
+
+      .bottom-nav{
+        position:fixed;
+        left:12px;
+        right:12px;
+        bottom:12px;
+        height:68px;
+        border-radius:24px;
+        background:rgba(15,15,15,.86);
+        border:1px solid rgba(255,255,255,.1);
+        backdrop-filter:blur(24px);
+        display:grid;
+        grid-template-columns:repeat(4,1fr);
+        z-index:50;
+        box-shadow:0 20px 70px rgba(0,0,0,.45);
+      }
+
+      .bottom-nav div{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:4px;
+        color:#999;
+        font-size:11px;
+      }
+
+      .bottom-nav .active{
+        color:var(--gold);
+      }
+    }
+
+    @media(max-width:420px){
+      .product{
+        grid-template-columns:52px 1fr auto;
+      }
+
+      .thumb{
+        width:52px;
+        height:52px;
+      }
+
+      .product-actions{
+        gap:6px;
+      }
+
+      .icon-btn{
+        width:34px;
+        height:34px;
+        font-size:14px;
+      }
+
+      input{
+        height:50px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-<header>
-  <h1>ZYQEN DASHBOARD</h1>
-  <button class="logout" id="logoutBtn">Sair</button>
-</header>
+  <div class="dashboard">
 
-<div class="container">
-
-  <!-- ADD PRODUCT -->
-  <div class="card">
-    <h2>Adicionar Produto</h2>
-
-    <input id="name" placeholder="Nome do produto">
-    <input id="price" placeholder="Preço">
-    <input id="image" placeholder="Imagem URL">
-    <input id="link" placeholder="Link afiliado">
-
-    <button class="add" id="addBtn">Adicionar</button>
-  </div>
-
-  <!-- PRODUCT LIST -->
-  <div class="card">
-    <h2>Produtos</h2>
-    <div id="products"></div>
-  </div>
-
-</div>
-
-<script type="module">
-
-import { auth, db, ADMIN_EMAIL } from "./firebase.js";
-
-import {
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  doc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-// ==========================================
-// PROTEÇÃO ADMIN
-// ==========================================
-onAuthStateChanged(auth, (user) => {
-  if (!user || user.email !== ADMIN_EMAIL) {
-    window.location.href = "admin.html";
-  }
-});
-
-
-// ==========================================
-// LOGOUT
-// ==========================================
-document.getElementById("logoutBtn").onclick = () => {
-  signOut(auth);
-};
-
-
-// ==========================================
-// ADD PRODUCT
-// ==========================================
-document.getElementById("addBtn").onclick = async () => {
-
-  const name = document.getElementById("name").value;
-  const price = document.getElementById("price").value;
-  const image = document.getElementById("image").value;
-  const link = document.getElementById("link").value;
-
-  if(!name || !price) return alert("Preencha os campos");
-
-  await addDoc(collection(db,"products"),{
-    name,
-    price,
-    image,
-    link,
-    createdAt: Date.now()
-  });
-
-  loadProducts();
-};
-
-
-// ==========================================
-// LOAD PRODUCTS
-// ==========================================
-async function loadProducts(){
-
-  const container = document.getElementById("products");
-  container.innerHTML = "";
-
-  const snap = await getDocs(collection(db,"products"));
-
-  snap.forEach((docItem)=>{
-
-    const p = docItem.data();
-
-    const div = document.createElement("div");
-    div.className = "product";
-
-    div.innerHTML = `
+    <aside>
       <div>
-        <strong>${p.name}</strong><br>
-        R$ ${p.price}
-      </div>
-      <button class="delete">X</button>
-    `;
+        <div class="brand">
+          <div class="brand-icon">Z</div>
+          <div>
+            <h1>ZYQEN</h1>
+            <span>DASHBOARD</span>
+          </div>
+        </div>
 
-    div.querySelector("button").onclick = async () => {
-      await deleteDoc(doc(db,"products",docItem.id));
-      loadProducts();
+        <nav>
+          <div class="nav-item">⌂ Visão Geral</div>
+          <div class="nav-item active">▱ Produtos</div>
+          <div class="nav-item">▤ Categorias</div>
+          <div class="nav-item">▥ Estatísticas</div>
+          <div class="nav-item">⚙ Configurações</div>
+        </nav>
+      </div>
+
+      <div>
+        <div class="admin-box">
+          <div class="admin-name">
+            <div class="admin-mini">Z</div>
+            <div>Zyqen Admin</div>
+          </div>
+          <div class="admin-email" id="adminEmail">admin</div>
+        </div>
+
+        <button class="logout" id="logoutBtn">Sair</button>
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <button class="mobile-menu">☰</button>
+
+        <div class="page-title">
+          <h2>Produtos</h2>
+          <p>Gerencie os produtos da sua página</p>
+        </div>
+
+        <div class="top-actions">
+          <input class="search" id="searchInput" placeholder="Buscar produto...">
+          <div class="brand-icon" style="width:52px;height:52px;font-size:24px;">Z</div>
+        </div>
+      </div>
+
+      <div class="content-grid">
+
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">▱ Adicionar Produto</div>
+          </div>
+
+          <div class="form">
+            <div class="field">
+              <label>Nome do produto</label>
+              <input id="name" placeholder="Ex: iPhone 15 Pro Max">
+            </div>
+
+            <div class="field">
+              <label>Preço</label>
+              <input id="price" placeholder="Ex: 4999.90">
+            </div>
+
+            <div class="field">
+              <label>Imagem do produto</label>
+              <input id="image" placeholder="URL da imagem">
+            </div>
+
+            <div class="field">
+              <label>Link afiliado</label>
+              <input id="link" placeholder="https://exemplo.com/seu-link">
+            </div>
+
+            <button class="add" id="addBtn">+ Adicionar Produto</button>
+
+            <div class="hint">
+              Apenas o administrador pode adicionar, editar ou remover produtos.
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">
+              Produtos Cadastrados
+              <span class="badge" id="countBadge">0</span>
+            </div>
+          </div>
+
+          <div class="products-list" id="products">
+            <div class="empty">Carregando produtos...</div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="active">▱<span>Produtos</span></div>
+    <div>▤<span>Categorias</span></div>
+    <div>▥<span>Stats</span></div>
+    <div>⚙<span>Config.</span></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+    import { auth, db, ADMIN_EMAIL } from "./firebase.js";
+
+    import {
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      collection,
+      addDoc,
+      getDocs,
+      deleteDoc,
+      doc,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const logoutBtn = document.getElementById("logoutBtn");
+    const addBtn = document.getElementById("addBtn");
+    const productsContainer = document.getElementById("products");
+    const countBadge = document.getElementById("countBadge");
+    const searchInput = document.getElementById("searchInput");
+    const toast = document.getElementById("toast");
+    const adminEmail = document.getElementById("adminEmail");
+
+    let allProducts = [];
+
+    function showToast(message){
+      toast.textContent = message;
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user || user.email !== ADMIN_EMAIL) {
+        window.location.href = "admin.html";
+        return;
+      }
+
+      adminEmail.textContent = user.email;
+    });
+
+    logoutBtn.onclick = async () => {
+      await signOut(auth);
+      window.location.href = "admin.html";
     };
 
-    container.appendChild(div);
+    addBtn.onclick = async () => {
+      const name = document.getElementById("name").value.trim();
+      const price = document.getElementById("price").value.trim();
+      const image = document.getElementById("image").value.trim();
+      const link = document.getElementById("link").value.trim();
 
-  });
+      if(!name || !price){
+        showToast("Preencha nome e preço.");
+        return;
+      }
 
-}
+      addBtn.disabled = true;
+      addBtn.textContent = "Adicionando...";
 
-loadProducts();
+      try{
+        await addDoc(collection(db,"products"),{
+          name,
+          price,
+          image,
+          link,
+          createdAt: Date.now()
+        });
 
-</script>
+        document.getElementById("name").value = "";
+        document.getElementById("price").value = "";
+        document.getElementById("image").value = "";
+        document.getElementById("link").value = "";
+
+        showToast("Produto adicionado com sucesso.");
+        await loadProducts();
+
+      }catch(error){
+        console.error(error);
+        showToast("Erro ao adicionar produto.");
+      }
+
+      addBtn.disabled = false;
+      addBtn.textContent = "+ Adicionar Produto";
+    };
+
+    async function loadProducts(){
+      productsContainer.innerHTML = `<div class="empty">Carregando produtos...</div>`;
+
+      try{
+        const q = query(collection(db,"products"), orderBy("createdAt","desc"));
+        const snap = await getDocs(q);
+
+        allProducts = [];
+
+        snap.forEach((docItem)=>{
+          allProducts.push({
+            id: docItem.id,
+            ...docItem.data()
+          });
+        });
+
+        renderProducts(allProducts);
+
+      }catch(error){
+        console.error(error);
+        productsContainer.innerHTML = `<div class="empty">Erro ao carregar produtos.</div>`;
+      }
+    }
+
+    function renderProducts(products){
+      productsContainer.innerHTML = "";
+      countBadge.textContent = products.length;
+
+      if(products.length === 0){
+        productsContainer.innerHTML = `<div class="empty">Nenhum produto cadastrado ainda.</div>`;
+        return;
+      }
+
+      products.forEach((p)=>{
+        const div = document.createElement("div");
+        div.className = "product";
+
+        const image = p.image || "https://via.placeholder.com/300";
+        const name = p.name || "Sem nome";
+        const price = p.price || "0";
+        const link = p.link || "#";
+
+        div.innerHTML = `
+          <img class="thumb" src="${image}" alt="${name}">
+          
+          <div>
+            <strong>${name}</strong>
+            <span>R$ ${price}</span>
+            <small>${link}</small>
+          </div>
+
+          <div class="product-actions">
+            <button class="icon-btn open" title="Abrir produto">↗</button>
+            <button class="icon-btn delete" title="Excluir produto">🗑</button>
+          </div>
+        `;
+
+        div.querySelector(".open").onclick = () => {
+          if(link && link !== "#"){
+            window.open(link, "_blank");
+          }
+        };
+
+        div.querySelector(".delete").onclick = async () => {
+          const confirmDelete = confirm(`Excluir "${name}"?`);
+
+          if(!confirmDelete) return;
+
+          try{
+            await deleteDoc(doc(db,"products",p.id));
+            showToast("Produto removido.");
+            await loadProducts();
+          }catch(error){
+            console.error(error);
+            showToast("Erro ao remover produto.");
+          }
+        };
+
+        productsContainer.appendChild(div);
+      });
+    }
+
+    if(searchInput){
+      searchInput.addEventListener("input", () => {
+        const term = searchInput.value.toLowerCase().trim();
+
+        const filtered = allProducts.filter((p) => {
+          return String(p.name || "").toLowerCase().includes(term);
+        });
+
+        renderProducts(filtered);
+      });
+    }
+
+    loadProducts();
+  </script>
 
 </body>
 </html>

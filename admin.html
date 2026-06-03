@@ -1,236 +1,125 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
   <meta charset="UTF-8" />
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
   <title>Zyqen Admin</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
+    *{margin:0;padding:0;box-sizing:border-box}
 
     body{
-
       font-family:"Poppins",sans-serif;
-
       min-height:100vh;
-
       background:
-      radial-gradient(circle at top left,#3b2b12 0%,transparent 30%),
-      radial-gradient(circle at bottom right,#6f531f 0%,transparent 30%),
-      #090909;
-
+        radial-gradient(circle at top left,rgba(248,213,122,.22),transparent 34%),
+        radial-gradient(circle at bottom right,rgba(184,134,11,.18),transparent 34%),
+        #070707;
       color:white;
-
       display:flex;
-
       align-items:center;
-
       justify-content:center;
-
       overflow:hidden;
-
+      padding:20px;
     }
 
     .bg{
-
       position:fixed;
       inset:0;
-
-      background:
-      linear-gradient(120deg,
-      rgba(255,215,120,.05),
-      transparent,
-      rgba(255,215,120,.03));
-
+      background:linear-gradient(120deg,rgba(255,215,120,.06),transparent,rgba(255,215,120,.03));
       backdrop-filter:blur(10px);
-
     }
 
     .login-card{
-
       position:relative;
-
       width:100%;
-      max-width:420px;
-
-      padding:40px;
-
-      border-radius:30px;
-
-      background:rgba(255,255,255,.06);
-
-      border:1px solid rgba(255,255,255,.08);
-
-      backdrop-filter:blur(25px);
-
-      box-shadow:
-      0 0 40px rgba(255,215,120,.08),
-      0 20px 60px rgba(0,0,0,.5);
-
+      max-width:430px;
+      padding:42px;
+      border-radius:32px;
+      background:rgba(255,255,255,.065);
+      border:1px solid rgba(255,255,255,.1);
+      backdrop-filter:blur(24px);
+      box-shadow:0 0 50px rgba(255,215,120,.1),0 25px 80px rgba(0,0,0,.55);
       z-index:2;
-
       text-align:center;
-
-      animation:fade .6s ease;
-
+      animation:fade .7s ease;
     }
 
     @keyframes fade{
-
-      from{
-        opacity:0;
-        transform:translateY(20px);
-      }
-
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-
+      from{opacity:0;transform:translateY(22px)}
+      to{opacity:1;transform:translateY(0)}
     }
 
     .logo{
-
-      width:90px;
-      height:90px;
-
-      margin:0 auto 20px;
-
+      width:92px;
+      height:92px;
+      margin:0 auto 22px;
       border-radius:50%;
-
-      background:
-      linear-gradient(135deg,#f8d57a,#b8860b);
-
+      background:linear-gradient(135deg,#ffd86b,#b8860b);
       display:flex;
       align-items:center;
       justify-content:center;
-
-      font-size:38px;
+      font-size:40px;
       font-weight:700;
-
       color:#111;
-
-      box-shadow:
-      0 0 30px rgba(255,215,120,.35);
-
+      box-shadow:0 0 35px rgba(255,215,120,.38);
     }
 
-    h1{
-
-      font-size:34px;
-
-      margin-bottom:10px;
-
-    }
-
-    p{
-
-      color:#cfcfcf;
-
-      line-height:1.6;
-
-      margin-bottom:30px;
-
-    }
+    h1{font-size:34px;margin-bottom:10px}
+    p{color:#cfcfcf;line-height:1.6;margin-bottom:30px}
 
     .login-btn{
-
       width:100%;
-
-      height:58px;
-
+      height:60px;
       border:none;
-
       border-radius:18px;
-
-      background:
-      linear-gradient(135deg,#f8d57a,#b8860b);
-
+      background:linear-gradient(135deg,#ffd86b,#b8860b);
       color:#111;
-
       font-size:16px;
       font-weight:700;
-
       cursor:pointer;
-
       transition:.25s;
-
-      box-shadow:
-      0 10px 30px rgba(255,215,120,.25);
-
+      box-shadow:0 12px 35px rgba(255,215,120,.25);
     }
 
     .login-btn:hover{
-
       transform:translateY(-2px) scale(1.01);
-
-      box-shadow:
-      0 15px 40px rgba(255,215,120,.35);
-
+      box-shadow:0 18px 45px rgba(255,215,120,.35);
     }
 
     .status{
-
       margin-top:20px;
-
       color:#ffb3b3;
-
       font-size:14px;
-
       min-height:20px;
-
     }
 
+    @media(max-width:480px){
+      .login-card{padding:32px 24px;border-radius:26px}
+      h1{font-size:28px}
+      .logo{width:78px;height:78px;font-size:34px}
+    }
   </style>
-
 </head>
 
 <body>
-
   <div class="bg"></div>
 
   <div class="login-card">
-
-    <div class="logo">
-      Z
-    </div>
-
+    <div class="logo">Z</div>
     <h1>Zyqen Admin</h1>
+    <p>Painel privado da Zyqen Links</p>
 
-    <p>
-      Painel privado da Zyqen Links
-    </p>
-
-    <button id="loginBtn" class="login-btn">
-      Entrar com Google
-    </button>
-
+    <button id="loginBtn" class="login-btn">Entrar com Google</button>
     <div id="status" class="status"></div>
-
   </div>
 
   <script type="module">
-
-    import {
-      auth,
-      provider,
-      ADMIN_EMAIL
-    } from "./firebase.js";
+    import { auth, provider, ADMIN_EMAIL } from "./firebase.js";
 
     import {
       signInWithPopup,
@@ -238,80 +127,39 @@
       signOut
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-
-    // ==========================================
-    // ELEMENTOS
-    // ==========================================
-
     const loginBtn = document.getElementById("loginBtn");
-
     const status = document.getElementById("status");
 
-
-    // ==========================================
-    // LOGIN GOOGLE
-    // ==========================================
-
     loginBtn.addEventListener("click", async () => {
-
       try{
-
         const result = await signInWithPopup(auth, provider);
-
         const user = result.user;
 
-        // EMAIL ERRADO
-
         if(user.email !== ADMIN_EMAIL){
-
           status.innerHTML = "Acesso negado.";
-
           await signOut(auth);
-
           return;
-
         }
-
-        // LOGIN OK
 
         status.innerHTML = "Entrando no painel...";
 
         setTimeout(() => {
-
           window.location.href = "dashboard.html";
+        }, 800);
 
-        },1000);
-
-      }
-
-      catch(error){
-
+      }catch(error){
         console.error(error);
-
         status.innerHTML = "Erro ao entrar.";
-
       }
-
     });
 
-
-    // ==========================================
-    // LOGIN AUTOMÁTICO
-    // ==========================================
-
     onAuthStateChanged(auth,(user)=>{
-
       if(!user) return;
 
       if(user.email === ADMIN_EMAIL){
-
         window.location.href = "dashboard.html";
-
       }
-
     });
-
   </script>
-
 </body>
 </html>
