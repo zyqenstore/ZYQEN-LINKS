@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zyqen Admin Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body{
+      margin:0;
+      font-family:"Poppins",sans-serif;
+      background:#0b0b0b;
+      color:#fff;
+    }
+
+    header{
+      padding:20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:rgba(255,215,120,.05);
+      border-bottom:1px solid rgba(255,215,120,.2);
+    }
+
+    h1{
+      font-size:20px;
+      color:#f8d57a;
+    }
+
+    button{
+      cursor:pointer;
+      border:none;
+      padding:10px 15px;
+      border-radius:10px;
+      font-weight:600;
+    }
+
+    .logout{
+      background:#f8d57a;
+      color:#111;
+    }
+
+    .container{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+      padding:20px;
+    }
+
+    .card{
+      background:rgba(255,255,255,.05);
+      padding:20px;
+      border-radius:15px;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    input{
+      width:100%;
+      padding:10px;
+      margin:8px 0;
+      border-radius:10px;
+      border:none;
+      outline:none;
+    }
+
+    .add{
+      background:#f8d57a;
+      color:#111;
+      width:100%;
+    }
+
+    .product{
+      display:flex;
+      justify-content:space-between;
+      padding:10px;
+      margin-top:10px;
+      background:rgba(255,255,255,.05);
+      border-radius:10px;
+    }
+
+    .delete{
+      background:#ff4d4d;
+      color:#fff;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>ZYQEN DASHBOARD</h1>
+  <button class="logout" id="logoutBtn">Sair</button>
+</header>
+
+<div class="container">
+
+  <!-- ADD PRODUCT -->
+  <div class="card">
+    <h2>Adicionar Produto</h2>
+
+    <input id="name" placeholder="Nome do produto">
+    <input id="price" placeholder="Preço">
+    <input id="image" placeholder="Imagem URL">
+    <input id="link" placeholder="Link afiliado">
+
+    <button class="add" id="addBtn">Adicionar</button>
+  </div>
+
+  <!-- PRODUCT LIST -->
+  <div class="card">
+    <h2>Produtos</h2>
+    <div id="products"></div>
+  </div>
+
+</div>
+
+<script type="module">
+
+import { auth, db, ADMIN_EMAIL } from "./firebase.js";
+
+import {
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+// ==========================================
+// PROTEÇÃO ADMIN
+// ==========================================
+onAuthStateChanged(auth, (user) => {
+  if (!user || user.email !== ADMIN_EMAIL) {
+    window.location.href = "admin.html";
+  }
+});
+
+
+// ==========================================
+// LOGOUT
+// ==========================================
+document.getElementById("logoutBtn").onclick = () => {
+  signOut(auth);
+};
+
+
+// ==========================================
+// ADD PRODUCT
+// ==========================================
+document.getElementById("addBtn").onclick = async () => {
+
+  const name = document.getElementById("name").value;
+  const price = document.getElementById("price").value;
+  const image = document.getElementById("image").value;
+  const link = document.getElementById("link").value;
+
+  if(!name || !price) return alert("Preencha os campos");
+
+  await addDoc(collection(db,"products"),{
+    name,
+    price,
+    image,
+    link,
+    createdAt: Date.now()
+  });
+
+  loadProducts();
+};
+
+
+// ==========================================
+// LOAD PRODUCTS
+// ==========================================
+async function loadProducts(){
+
+  const container = document.getElementById("products");
+  container.innerHTML = "";
+
+  const snap = await getDocs(collection(db,"products"));
+
+  snap.forEach((docItem)=>{
+
+    const p = docItem.data();
+
+    const div = document.createElement("div");
+    div.className = "product";
+
+    div.innerHTML = `
+      <div>
+        <strong>${p.name}</strong><br>
+        R$ ${p.price}
+      </div>
+      <button class="delete">X</button>
+    `;
+
+    div.querySelector("button").onclick = async () => {
+      await deleteDoc(doc(db,"products",docItem.id));
+      loadProducts();
+    };
+
+    container.appendChild(div);
+
+  });
+
+}
+
+loadProducts();
+
+</script>
+
+</body>
+</html>
