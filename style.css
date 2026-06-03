@@ -4,6 +4,10 @@
   box-sizing:border-box;
 
   -webkit-tap-highlight-color:transparent;
+}
+
+button,
+a{
   touch-action:manipulation;
 }
 
@@ -21,7 +25,9 @@ body{
   min-height:100vh;
   overflow-x:hidden;
   position:relative;
-  overscroll-behavior:none;
+
+  overscroll-behavior-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
 
 /* FUNDO ANIMADO */
@@ -745,5 +751,100 @@ body{
     animation-iteration-count:1 !important;
     transition-duration:.01ms !important;
     scroll-behavior:auto !important;
+  }
+}
+
+/* ==========================================
+   MOBILE PERFORMANCE BOOST
+========================================== */
+
+@media (max-width:600px){
+
+  .particles{
+    display:none;
+  }
+
+  .background::before{
+    animation:none;
+    opacity:.35;
+  }
+
+  .background::after{
+    animation:none;
+    width:350px;
+    height:350px;
+    opacity:.7;
+  }
+
+  .avatar{
+    width:95px;
+    height:95px;
+    animation:none;
+  }
+
+  .avatar::before{
+    display:none;
+  }
+
+  .profile h1{
+    font-size:28px;
+  }
+
+  .subtitle{
+    font-size:14px;
+  }
+
+  .bio{
+    font-size:12px;
+    max-width:290px;
+  }
+
+  .social{
+    width:48px;
+    height:48px;
+    font-size:20px;
+  }
+
+  .products{
+    gap:10px;
+  }
+
+  .card{
+    padding:12px;
+    border-radius:18px;
+    backdrop-filter:none;
+  }
+
+  .card:hover{
+    transform:none;
+    box-shadow:none;
+  }
+
+  .card::before{
+    display:none;
+  }
+
+  .icon{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+  }
+
+  .info h2{
+    font-size:14px;
+  }
+
+  .info p{
+    font-size:11px;
+  }
+
+  .arrow{
+    width:34px;
+    height:34px;
+    font-size:18px;
+  }
+
+  .mouse-glow{
+    display:none !important;
   }
 }
