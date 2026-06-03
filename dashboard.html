@@ -2,9 +2,16 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+
 <meta
   name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  content="width=device-width,
+           initial-scale=1.0,
+           minimum-scale=1.0,
+           maximum-scale=1.0,
+           user-scalable=no,
+           viewport-fit=cover">
+
   <title>Zyqen Admin Dashboard</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,18 +19,30 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+      touch-action:manipulation;
+    }
+
+    html{
+      width:100%;
+      min-height:100%;
+      overflow-x:hidden;
+      -webkit-text-size-adjust:100%;
+      text-size-adjust:100%;
+      overscroll-behavior:none;
+    }
 
     :root{
       --bg:#070707;
-      --panel:rgba(255,255,255,.055);
-      --panel2:rgba(255,255,255,.08);
       --line:rgba(255,255,255,.1);
       --gold:#ffd86b;
       --gold2:#b8860b;
       --text:#fff;
       --muted:#aaa;
-      --danger:#ff5c5c;
       --radius:24px;
     }
 
@@ -35,7 +54,9 @@
         var(--bg);
       color:var(--text);
       min-height:100vh;
+      min-height:100dvh;
       overflow-x:hidden;
+      overscroll-behavior:none;
     }
 
     body::before{
@@ -55,6 +76,7 @@
       display:grid;
       grid-template-columns:280px 1fr;
       min-height:100vh;
+      min-height:100dvh;
     }
 
     aside{
@@ -68,6 +90,7 @@
       position:sticky;
       top:0;
       height:100vh;
+      height:100dvh;
     }
 
     .brand{
@@ -89,6 +112,8 @@
       font-size:28px;
       font-weight:700;
       box-shadow:0 0 28px rgba(255,216,107,.2);
+      flex-shrink:0;
+      user-select:none;
     }
 
     .brand h1{
@@ -120,6 +145,13 @@
       font-size:14px;
       background:transparent;
       border:1px solid transparent;
+      cursor:pointer;
+      transition:.25s;
+      user-select:none;
+    }
+
+    .nav-item:hover{
+      background:rgba(255,255,255,.04);
     }
 
     .nav-item.active{
@@ -153,6 +185,7 @@
       justify-content:center;
       color:var(--gold);
       font-weight:700;
+      flex-shrink:0;
     }
 
     .admin-email{
@@ -166,6 +199,7 @@
       cursor:pointer;
       border:none;
       font-family:inherit;
+      touch-action:manipulation;
     }
 
     .logout{
@@ -222,6 +256,7 @@
       color:#fff;
       padding:0 18px;
       outline:none;
+      font-size:14px;
     }
 
     .mobile-menu{
@@ -240,6 +275,10 @@
       grid-template-columns:minmax(320px,420px) 1fr;
       gap:22px;
       align-items:start;
+    }
+
+    .single-grid{
+      grid-template-columns:1fr;
     }
 
     .card{
@@ -304,6 +343,7 @@
       padding:0 15px;
       font-family:inherit;
       transition:.2s;
+      font-size:14px;
     }
 
     input:focus{
@@ -337,6 +377,32 @@
       color:#8d8d8d;
       font-size:12px;
       line-height:1.5;
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      padding:24px;
+    }
+
+    .stat-card{
+      padding:22px;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.045);
+    }
+
+    .stat-card span{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .stat-card strong{
+      display:block;
+      margin-top:8px;
+      font-size:32px;
+      color:var(--gold);
     }
 
     .products-list{
@@ -474,11 +540,14 @@
       }
 
       main{
-        padding:22px;
+        padding:18px;
       }
 
       .mobile-menu{
         display:block;
+        width:44px;
+        height:44px;
+        font-size:20px;
       }
 
       .content-grid{
@@ -486,26 +555,28 @@
       }
 
       .search{
-        width:240px;
+        width:220px;
       }
     }
 
     @media(max-width:720px){
       main{
-        padding:18px 14px 92px;
+        padding:14px 12px 88px;
       }
 
       .topbar{
         align-items:flex-start;
-        margin-bottom:22px;
+        margin-bottom:18px;
+        gap:12px;
       }
 
       .page-title h2{
-        font-size:25px;
+        font-size:22px;
       }
 
       .page-title p{
-        font-size:13px;
+        font-size:12px;
+        margin-top:5px;
       }
 
       .top-actions{
@@ -513,60 +584,106 @@
       }
 
       .card{
-        border-radius:22px;
+        border-radius:18px;
       }
 
       .card-header{
-        padding:20px;
+        padding:16px;
+      }
+
+      .card-title{
+        font-size:17px;
       }
 
       .form{
-        padding:20px;
+        padding:16px;
       }
 
-      .products-list{
-        padding:12px;
-        max-height:none;
+      label{
+        font-size:12px;
       }
 
-      .product{
-        grid-template-columns:58px 1fr auto;
-        gap:12px;
-        padding:12px;
+      input{
+        height:46px;
+        font-size:13px;
+        border-radius:12px;
       }
 
-      .thumb{
-        width:58px;
-        height:58px;
+      .add{
+        height:50px;
+        font-size:14px;
         border-radius:14px;
       }
 
+      .hint{
+        font-size:11px;
+      }
+
+      .stats-grid{
+        grid-template-columns:1fr;
+        padding:14px;
+        gap:12px;
+      }
+
+      .stat-card{
+        padding:16px;
+        border-radius:16px;
+      }
+
+      .stat-card strong{
+        font-size:26px;
+      }
+
+      .products-list{
+        padding:10px;
+        max-height:none;
+        gap:10px;
+      }
+
+      .product{
+        grid-template-columns:52px 1fr auto;
+        gap:10px;
+        padding:10px;
+        border-radius:15px;
+      }
+
+      .thumb{
+        width:52px;
+        height:52px;
+        border-radius:12px;
+      }
+
       .product strong{
-        font-size:14px;
+        font-size:13px;
       }
 
       .product span{
-        font-size:12px;
+        font-size:11px;
       }
 
       .product small{
         display:none;
       }
 
+      .product-actions{
+        gap:6px;
+      }
+
       .icon-btn{
-        width:38px;
-        height:38px;
-        border-radius:12px;
+        width:34px;
+        height:34px;
+        border-radius:10px;
+        font-size:14px;
       }
 
       .bottom-nav{
         position:fixed;
-        left:12px;
-        right:12px;
-        bottom:12px;
-        height:68px;
-        border-radius:24px;
-        background:rgba(15,15,15,.86);
+        left:10px;
+        right:10px;
+        bottom:10px;
+        height:62px;
+        border-radius:20px;
+        background:rgba(15,15,15,.88);
         border:1px solid rgba(255,255,255,.1);
         backdrop-filter:blur(24px);
         display:grid;
@@ -580,9 +697,11 @@
         flex-direction:column;
         align-items:center;
         justify-content:center;
-        gap:4px;
+        gap:3px;
         color:#999;
-        font-size:11px;
+        font-size:10px;
+        cursor:pointer;
+        user-select:none;
       }
 
       .bottom-nav .active{
@@ -591,27 +710,97 @@
     }
 
     @media(max-width:420px){
-      .product{
-        grid-template-columns:52px 1fr auto;
+      main{
+        padding:12px 10px 84px;
       }
 
-      .thumb{
-        width:52px;
-        height:52px;
+      .mobile-menu{
+        width:40px;
+        height:40px;
+        border-radius:12px;
+        font-size:18px;
       }
 
-      .product-actions{
-        gap:6px;
+      .page-title h2{
+        font-size:20px;
       }
 
-      .icon-btn{
-        width:34px;
-        height:34px;
-        font-size:14px;
+      .page-title p{
+        font-size:11px;
+      }
+
+      .card-header{
+        padding:14px;
+      }
+
+      .form{
+        padding:14px;
+      }
+
+      .field{
+        margin-bottom:14px;
       }
 
       input{
-        height:50px;
+        height:44px;
+      }
+
+      .product{
+        grid-template-columns:48px 1fr auto;
+      }
+
+      .thumb{
+        width:48px;
+        height:48px;
+      }
+
+      .icon-btn{
+        width:32px;
+        height:32px;
+        font-size:13px;
+      }
+
+      .bottom-nav{
+        height:58px;
+        border-radius:18px;
+      }
+    }
+
+    @media(max-width:360px){
+      main{
+        padding:10px 8px 80px;
+      }
+
+      .page-title h2{
+        font-size:18px;
+      }
+
+      .page-title p{
+        font-size:10px;
+      }
+
+      .card-title{
+        font-size:15px;
+      }
+
+      .product{
+        grid-template-columns:44px 1fr auto;
+        gap:8px;
+        padding:8px;
+      }
+
+      .thumb{
+        width:44px;
+        height:44px;
+      }
+
+      .product strong{
+        font-size:12px;
+      }
+
+      .icon-btn{
+        width:30px;
+        height:30px;
       }
     }
   </style>
@@ -620,7 +809,6 @@
 <body>
 
   <div class="dashboard">
-
     <aside>
       <div>
         <div class="brand">
@@ -632,11 +820,10 @@
         </div>
 
         <nav>
-          <div class="nav-item">⌂ Visão Geral</div>
-          <div class="nav-item active">▱ Produtos</div>
-          <div class="nav-item">▤ Categorias</div>
-          <div class="nav-item">▥ Estatísticas</div>
-          <div class="nav-item">⚙ Configurações</div>
+          <div class="nav-item" data-page="overview">⌂ Visão Geral</div>
+          <div class="nav-item active" data-page="products">▱ Produtos</div>
+          <div class="nav-item" data-page="stats">▥ Estatísticas</div>
+          <div class="nav-item" data-page="settings">⚙ Configurações</div>
         </nav>
       </div>
 
@@ -668,8 +855,182 @@
         </div>
       </div>
 
-      <div class="content-grid">
+      <div class="content-grid" id="contentGrid"></div>
+    </main>
+  </div>
 
+  <div class="bottom-nav">
+    <div data-page="overview">⌂<span>Início</span></div>
+    <div class="active" data-page="products">▱<span>Produtos</span></div>
+    <div data-page="stats">▥<span>Stats</span></div>
+    <div data-page="settings">⚙<span>Config.</span></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+    import { auth, db, ADMIN_EMAIL } from "./firebase.js";
+
+    import {
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      collection,
+      addDoc,
+      getDocs,
+      deleteDoc,
+      doc,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const logoutBtn = document.getElementById("logoutBtn");
+    const contentGrid = document.getElementById("contentGrid");
+    const searchInput = document.getElementById("searchInput");
+    const toast = document.getElementById("toast");
+    const adminEmail = document.getElementById("adminEmail");
+    const pageTitle = document.querySelector(".page-title h2");
+    const pageSubtitle = document.querySelector(".page-title p");
+    const navItems = document.querySelectorAll("[data-page]");
+
+    let allProducts = [];
+    let currentPage = "products";
+
+    function showToast(message){
+      toast.textContent = message;
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+    }
+
+    function setActivePage(page){
+      navItems.forEach(item => {
+        item.classList.toggle("active", item.dataset.page === page);
+      });
+    }
+
+    function renderOverview(){
+      currentPage = "overview";
+      setActivePage("overview");
+      pageTitle.textContent = "Visão Geral";
+      pageSubtitle.textContent = "Resumo rápido do seu painel";
+      searchInput.style.display = "none";
+
+      contentGrid.className = "content-grid single-grid";
+
+      contentGrid.innerHTML = `
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">⌂ Resumo</div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span>Produtos cadastrados</span>
+              <strong>${allProducts.length}</strong>
+            </div>
+
+            <div class="stat-card">
+              <span>Página pública</span>
+              <strong>ON</strong>
+            </div>
+
+            <div class="stat-card">
+              <span>Banco Firestore</span>
+              <strong>OK</strong>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderStats(){
+      currentPage = "stats";
+      setActivePage("stats");
+      pageTitle.textContent = "Estatísticas";
+      pageSubtitle.textContent = "Acompanhe os dados dos produtos";
+      searchInput.style.display = "none";
+
+      contentGrid.className = "content-grid single-grid";
+
+      contentGrid.innerHTML = `
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">▥ Estatísticas</div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span>Total de produtos</span>
+              <strong>${allProducts.length}</strong>
+            </div>
+
+            <div class="stat-card">
+              <span>Produtos com imagem</span>
+              <strong>${allProducts.filter(p => p.image).length}</strong>
+            </div>
+
+            <div class="stat-card">
+              <span>Produtos com link</span>
+              <strong>${allProducts.filter(p => p.link).length}</strong>
+            </div>
+          </div>
+
+          <div class="form">
+            <p class="hint">Em breve você pode adicionar contagem de cliques, visitas e conversões.</p>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderSettings(){
+      currentPage = "settings";
+      setActivePage("settings");
+      pageTitle.textContent = "Configurações";
+      pageSubtitle.textContent = "Ajustes do painel Zyqen";
+      searchInput.style.display = "none";
+
+      contentGrid.className = "content-grid single-grid";
+
+      contentGrid.innerHTML = `
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">⚙ Configurações</div>
+          </div>
+
+          <div class="form">
+            <div class="field">
+              <label>Email administrador</label>
+              <input value="${ADMIN_EMAIL}" readonly>
+            </div>
+
+            <div class="field">
+              <label>Status do painel</label>
+              <input value="Conectado ao Firebase" readonly>
+            </div>
+
+            <p class="hint">
+              As configurações sensíveis continuam protegidas no arquivo firebase.js e nas regras do Firestore.
+            </p>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderProductsLayout(){
+      currentPage = "products";
+      setActivePage("products");
+      pageTitle.textContent = "Produtos";
+      pageSubtitle.textContent = "Gerencie os produtos da sua página";
+      searchInput.style.display = "block";
+
+      contentGrid.className = "content-grid";
+
+      contentGrid.innerHTML = `
         <section class="card">
           <div class="card-header">
             <div class="card-title">▱ Adicionar Produto</div>
@@ -699,7 +1060,7 @@
             <button class="add" id="addBtn">+ Adicionar Produto</button>
 
             <div class="hint">
-              Apenas o administrador pode adicionar, editar ou remover produtos.
+              Produtos novos aparecem automaticamente no topo da lista.
             </div>
           </div>
         </section>
@@ -716,72 +1077,15 @@
             <div class="empty">Carregando produtos...</div>
           </div>
         </section>
+      `;
 
-      </div>
-    </main>
-  </div>
-
-  <div class="bottom-nav">
-    <div class="active">▱<span>Produtos</span></div>
-    <div>▤<span>Categorias</span></div>
-    <div>▥<span>Stats</span></div>
-    <div>⚙<span>Config.</span></div>
-  </div>
-
-  <div class="toast" id="toast"></div>
-
-  <script type="module">
-    import { auth, db, ADMIN_EMAIL } from "./firebase.js";
-
-    import {
-      signOut,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-    import {
-      collection,
-      addDoc,
-      getDocs,
-      deleteDoc,
-      doc,
-      query,
-      orderBy
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    const logoutBtn = document.getElementById("logoutBtn");
-    const addBtn = document.getElementById("addBtn");
-    const productsContainer = document.getElementById("products");
-    const countBadge = document.getElementById("countBadge");
-    const searchInput = document.getElementById("searchInput");
-    const toast = document.getElementById("toast");
-    const adminEmail = document.getElementById("adminEmail");
-
-    let allProducts = [];
-
-    function showToast(message){
-      toast.textContent = message;
-      toast.classList.add("show");
-
-      setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2200);
+      document.getElementById("addBtn").onclick = addProduct;
+      renderProducts(allProducts);
     }
 
-    onAuthStateChanged(auth, (user) => {
-      if (!user || user.email !== ADMIN_EMAIL) {
-        window.location.href = "admin.html";
-        return;
-      }
+    async function addProduct(){
+      const addBtn = document.getElementById("addBtn");
 
-      adminEmail.textContent = user.email;
-    });
-
-    logoutBtn.onclick = async () => {
-      await signOut(auth);
-      window.location.href = "admin.html";
-    };
-
-    addBtn.onclick = async () => {
       const name = document.getElementById("name").value.trim();
       const price = document.getElementById("price").value.trim();
       const image = document.getElementById("image").value.trim();
@@ -804,13 +1108,13 @@
           createdAt: Date.now()
         });
 
+        showToast("Produto adicionado com sucesso.");
+        await loadProducts();
+
         document.getElementById("name").value = "";
         document.getElementById("price").value = "";
         document.getElementById("image").value = "";
         document.getElementById("link").value = "";
-
-        showToast("Produto adicionado com sucesso.");
-        await loadProducts();
 
       }catch(error){
         console.error(error);
@@ -819,11 +1123,9 @@
 
       addBtn.disabled = false;
       addBtn.textContent = "+ Adicionar Produto";
-    };
+    }
 
     async function loadProducts(){
-      productsContainer.innerHTML = `<div class="empty">Carregando produtos...</div>`;
-
       try{
         const q = query(collection(db,"products"), orderBy("createdAt","desc"));
         const snap = await getDocs(q);
@@ -837,15 +1139,22 @@
           });
         });
 
-        renderProducts(allProducts);
+        if(currentPage === "products"){
+          renderProductsLayout();
+        }
 
       }catch(error){
         console.error(error);
-        productsContainer.innerHTML = `<div class="empty">Erro ao carregar produtos.</div>`;
+        showToast("Erro ao carregar produtos.");
       }
     }
 
     function renderProducts(products){
+      const productsContainer = document.getElementById("products");
+      const countBadge = document.getElementById("countBadge");
+
+      if(!productsContainer || !countBadge) return;
+
       productsContainer.innerHTML = "";
       countBadge.textContent = products.length;
 
@@ -865,7 +1174,7 @@
 
         div.innerHTML = `
           <img class="thumb" src="${image}" alt="${name}">
-          
+
           <div>
             <strong>${name}</strong>
             <span>R$ ${price}</span>
@@ -903,19 +1212,90 @@
       });
     }
 
-    if(searchInput){
-      searchInput.addEventListener("input", () => {
-        const term = searchInput.value.toLowerCase().trim();
+    searchInput.addEventListener("input", () => {
+      const term = searchInput.value.toLowerCase().trim();
 
-        const filtered = allProducts.filter((p) => {
-          return String(p.name || "").toLowerCase().includes(term);
-        });
-
-        renderProducts(filtered);
+      const filtered = allProducts.filter((p) => {
+        return String(p.name || "").toLowerCase().includes(term);
       });
-    }
 
-    loadProducts();
+      renderProducts(filtered);
+    });
+
+    navItems.forEach(item => {
+      item.addEventListener("click", () => {
+        const page = item.dataset.page;
+
+        if(page === "overview") renderOverview();
+        if(page === "products") renderProductsLayout();
+        if(page === "stats") renderStats();
+        if(page === "settings") renderSettings();
+      });
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user || user.email !== ADMIN_EMAIL) {
+        window.location.href = "admin.html";
+        return;
+      }
+
+      adminEmail.textContent = user.email;
+
+      await loadProducts();
+      renderProductsLayout();
+    });
+
+    logoutBtn.onclick = async () => {
+      await signOut(auth);
+      window.location.href = "admin.html";
+    };
+
+
+    document.addEventListener("wheel", (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+      }
+    }, { passive:false });
+
+    document.addEventListener("keydown", (e) => {
+      const blockedKeys = ["+", "-", "=", "0"];
+
+      if ((e.ctrlKey || e.metaKey) && blockedKeys.includes(e.key)) {
+        e.preventDefault();
+      }
+    });
+
+
+
+    document.addEventListener("gesturestart", (e) => {
+      e.preventDefault();
+    });
+
+    document.addEventListener("gesturechange", (e) => {
+      e.preventDefault();
+    });
+
+    document.addEventListener("gestureend", (e) => {
+      e.preventDefault();
+    });
+
+    let lastTouchEnd = 0;
+
+    document.addEventListener("touchend", (e) => {
+      const now = Date.now();
+
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+
+      lastTouchEnd = now;
+    }, { passive:false });
+
+    document.addEventListener("touchmove", (e) => {
+      if (e.scale !== undefined && e.scale !== 1) {
+        e.preventDefault();
+      }
+    }, { passive:false });
   </script>
 
 </body>

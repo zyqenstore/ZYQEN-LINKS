@@ -1,6 +1,4 @@
-// ==========================================
-// FIREBASE
-// ==========================================
+
 
 import { db } from "./firebase.js";
 
@@ -12,9 +10,6 @@ import {
 console.log("Firebase conectado:", db);
 
 
-// ==========================================
-// LOADING SCREEN
-// ==========================================
 
 const loader = document.createElement("div");
 
@@ -44,9 +39,7 @@ window.addEventListener("load", () => {
 });
 
 
-// ==========================================
-// STYLE LOADER
-// ==========================================
+
 
 const loaderStyle = document.createElement("style");
 
@@ -90,9 +83,7 @@ loaderStyle.innerHTML = `
 document.head.appendChild(loaderStyle);
 
 
-// ==========================================
-// FIREBASE PRODUCTS (CORRIGIDO)
-// ==========================================
+
 
 async function loadProducts() {
 
@@ -212,9 +203,7 @@ async function loadProducts() {
 loadProducts();
 
 
-// ==========================================
-// RIPPLE STYLE
-// ==========================================
+
 
 const rippleStyle = document.createElement("style");
 
@@ -243,9 +232,7 @@ rippleStyle.innerHTML = `
 document.head.appendChild(rippleStyle);
 
 
-// ==========================================
-// GLOW MOUSE
-// ==========================================
+
 
 if (window.innerWidth > 768) {
 
@@ -261,9 +248,7 @@ if (window.innerWidth > 768) {
 }
 
 
-// ==========================================
-// GLOW STYLE
-// ==========================================
+
 
 const glowStyle = document.createElement("style");
 
@@ -284,9 +269,7 @@ glowStyle.innerHTML = `
 document.head.appendChild(glowStyle);
 
 
-// ==========================================
-// SHARE BUTTON
-// ==========================================
+
 
 const shareBtn = document.querySelector(".share-btn");
 
@@ -305,32 +288,80 @@ if (shareBtn) {
   });
 }
 
+
+
 // ==========================================
 // BLOQUEAR ZOOM DESKTOP
 // ==========================================
 
 document.addEventListener("wheel", (e) => {
-  if (e.ctrlKey) {
+  if (e.ctrlKey || e.metaKey) {
     e.preventDefault();
   }
-}, { passive: false });
+}, { passive:false });
 
 document.addEventListener("keydown", (e) => {
+
+  const blockedKeys = [
+    "+",
+    "-",
+    "=",
+    "0"
+  ];
+
   if (
-    e.ctrlKey &&
-    (
-      e.key === "+" ||
-      e.key === "-" ||
-      e.key === "=" ||
-      e.key === "0"
-    )
+    (e.ctrlKey || e.metaKey) &&
+    blockedKeys.includes(e.key)
   ) {
     e.preventDefault();
   }
-});
+
+}, { passive:false });
+
 
 // ==========================================
-// FINAL
+// BLOQUEAR ZOOM IOS / ANDROID
 // ==========================================
+
+document.addEventListener("gesturestart", (e) => {
+  e.preventDefault();
+});
+
+document.addEventListener("gesturechange", (e) => {
+  e.preventDefault();
+});
+
+document.addEventListener("gestureend", (e) => {
+  e.preventDefault();
+});
+
+
+document.addEventListener("touchmove", (e) => {
+
+  if (
+    e.scale !== undefined &&
+    e.scale !== 1
+  ) {
+    e.preventDefault();
+  }
+
+}, { passive:false });
+
+
+let lastTouchEnd = 0;
+
+document.addEventListener("touchend", (e) => {
+
+  const now = Date.now();
+
+  if (now - lastTouchEnd <= 300) {
+    e.preventDefault();
+  }
+
+  lastTouchEnd = now;
+
+}, { passive:false });
+
+
 
 console.log("ZYQEN ULTRA PREMIUM V3 🚀");

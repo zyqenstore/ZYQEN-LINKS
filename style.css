@@ -2,10 +2,16 @@
   margin:0;
   padding:0;
   box-sizing:border-box;
+
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
 }
 
 html{
   scroll-behavior:smooth;
+  overflow-x:hidden;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
 }
 
 body{
@@ -15,6 +21,7 @@ body{
   min-height:100vh;
   overflow-x:hidden;
   position:relative;
+  overscroll-behavior:none;
 }
 
 /* FUNDO ANIMADO */
@@ -454,9 +461,7 @@ body{
   }
 }
 
-/* ================================================= */
-/* ULTRAWIDE */
-/* ================================================= */
+
 
 @media (min-width:1600px){
 
@@ -487,9 +492,8 @@ body{
   }
 }
 
-/* ================================================= */
-/* DESKTOP / NOTEBOOK */
-/* ================================================= */
+
+
 
 @media (max-width:1200px){
 
@@ -498,9 +502,7 @@ body{
   }
 }
 
-/* ================================================= */
-/* TABLET */
-/* ================================================= */
+
 
 @media (max-width:992px){
 
@@ -518,9 +520,6 @@ body{
   }
 }
 
-/* ================================================= */
-/* TABLET PEQUENO */
-/* ================================================= */
 
 @media (max-width:768px){
 
@@ -547,9 +546,7 @@ body{
   }
 }
 
-/* ================================================= */
-/* MOBILE */
-/* ================================================= */
+
 
 @media (max-width:600px){
 
@@ -623,9 +620,7 @@ body{
   }
 }
 
-/* ================================================= */
-/* IPHONE / ANDROID PEQUENO */
-/* ================================================= */
+
 
 @media (max-width:430px){
 
@@ -680,9 +675,7 @@ body{
   }
 }
 
-/* ================================================= */
-/* GALAXY FOLD / TELAS MUITO PEQUENAS */
-/* ================================================= */
+
 
 @media (max-width:360px){
 
@@ -743,9 +736,7 @@ body{
   }
 }
 
-/* ================================================= */
-/* REDUZ ANIMAÇÕES EM DISPOSITIVOS QUE PEDEM MENOS */
-/* ================================================= */
+
 
 @media (prefers-reduced-motion:reduce){
 

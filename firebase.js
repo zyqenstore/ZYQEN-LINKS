@@ -1,7 +1,3 @@
-// ==========================================
-// FIREBASE IMPORTS
-// ==========================================
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -11,10 +7,6 @@ import {
   GoogleAuthProvider 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-
-// ==========================================
-// FIREBASE CONFIG
-// ==========================================
 
 const firebaseConfig = {
   apiKey: "AIzaSyDB3ASQ43YEhMUzw-f-gL8hSxb10Ybxhn8",
@@ -26,30 +18,14 @@ const firebaseConfig = {
 };
 
 
-// ==========================================
-// INITIALIZE FIREBASE
-// ==========================================
-
 const app = initializeApp(firebaseConfig);
 
-
-// ==========================================
-// FIRESTORE DATABASE
-// ==========================================
 
 export const db = getFirestore(app);
 
 
-// ==========================================
-// AUTH
-// ==========================================
-
 export const auth = getAuth(app);
 
-
-// ==========================================
-// GOOGLE LOGIN PROVIDER
-// ==========================================
 
 export const provider = new GoogleAuthProvider();
 
@@ -58,8 +34,5 @@ provider.setCustomParameters({
 });
 
 
-// ==========================================
-// ADMIN CONFIG
-// ==========================================
 
 export const ADMIN_EMAIL = "kaiccarvalhosouzaa@gmail.com";
