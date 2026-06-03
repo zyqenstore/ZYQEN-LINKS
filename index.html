@@ -5,9 +5,13 @@
 
   <meta charset="UTF-8" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
   <title>Zyqen Links</title>
+
+  <meta name="theme-color" content="#05010d">
 
   <!-- CSS -->
   <link rel="stylesheet" href="style.css"/>
@@ -43,10 +47,10 @@
   </div>
 
   <!-- CONTAINER -->
-  <div class="container">
+  <main class="container">
 
-    <!-- TOPO -->
-    <div class="topbar">
+    <!-- HEADER -->
+    <header class="topbar">
 
       <div class="logo">
 
@@ -68,14 +72,18 @@
         🔗 Copiar link
       </button>
 
-    </div>
+    </header>
 
     <!-- PERFIL -->
-    <div class="profile">
+    <section class="profile">
 
       <div class="avatar">
 
-        <img src="https://i.imgur.com/2DhmtJ4.png">
+        <img
+          src="https://i.imgur.com/2DhmtJ4.png"
+          alt="Zyqen"
+          loading="eager"
+        >
 
       </div>
 
@@ -92,44 +100,68 @@
         Ferramentas, produtos virais e tecnologias que realmente valem a pena.
       </p>
 
-    </div>
+    </section>
 
-    <!-- REDES -->
-    <div class="socials">
+    <!-- SOCIAL -->
+    <section class="social-section">
 
-      <a 
-      class="social"
-      href="https://www.instagram.com/zyqen_oficial/"
-      target="_blank">
-        📷
-      </a>
+      <div class="socials">
 
-      <a 
-      class="social"
-      href="mailto:contato@zyqen.com">
-        ✉
-      </a>
+        <a
+          class="social"
+          href="https://www.instagram.com/zyqen_oficial/"
+          target="_blank"
+          aria-label="Instagram">
 
-    </div>
+          📷
+
+        </a>
+
+        <a
+          class="social"
+          href="mailto:contato@zyqen.com"
+          aria-label="Email">
+
+          ✉
+
+        </a>
+
+      </div>
+
+    </section>
 
     <!-- PRODUTOS -->
-    <div class="products">
+    <section class="products-section">
 
-    
-    </div>
+      <div class="section-title">
+
+        <h3>Produtos Recomendados</h3>
+
+        <span>Atualizado automaticamente</span>
+
+      </div>
+
+      <div class="products">
+
+        <!-- Firebase -->
+
+      </div>
+
+    </section>
 
     <!-- FOOTER -->
-    <div class="footer">
+    <footer class="footer">
 
-      © 2026 Zyqen Links
+      <p>© 2026 Zyqen Links</p>
 
-    </div>
+    </footer>
 
-  </div>
+  </main>
 
   <!-- JS -->
   <script type="module" src="firebase.js"></script>
   <script type="module" src="script.js"></script>
 
 </body>
+
 </html>
