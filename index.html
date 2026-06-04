@@ -17,16 +17,27 @@
 
   <title>Zyqen Links</title>
 
-  <meta name="theme-color" content="#05010d">
+  <link rel="manifest" href="manifest.json">
 
-  <!-- CSS -->
+  <link
+    rel="icon"
+    type="image/png"
+    href="Icones/Image/Zroxo.png">
+
+  <link
+    rel="apple-touch-icon"
+    href="Icones/Image/Zroxo.png">
+
+  <meta name="theme-color" content="#05010d">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Zyqen">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <link rel="stylesheet" href="style.css"/>
 
-  <!-- Fonte -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 </head>
@@ -74,16 +85,14 @@
 
       </div>
 
-      <button class="share-btn" type="button">
-
-        <img
-          src="Icones/Icon/link.svg"
-          alt=""
-          class="btn-icon"
-          draggable="false"
-        >
-
-      </button>
+<button class="share-btn" id="installBtn" type="button">
+  <img
+    src="Icones/Icon/download.svg"
+    alt=""
+    class="btn-icon"
+    draggable="false"
+  >
+</button>
 
     </header>
 
@@ -192,6 +201,14 @@
   <!-- JS -->
   <script type="module" src="firebase.js"></script>
   <script type="module" src="script.js"></script>
+
+  <script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js");
+    });
+  }
+</script>
 
 </body>
 

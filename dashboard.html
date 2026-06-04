@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
 
+  <link rel="manifest" href="manifest-admin.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Zyqen Admin">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <meta
   name="viewport"
   content="width=device-width,
@@ -13,6 +19,15 @@
            viewport-fit=cover">
 
   <title>Zyqen Admin Dashboard</title>
+
+<link
+  rel="icon"
+  type="image/png"
+  href="Icones/Image/Z.png">
+
+<link
+  rel="apple-touch-icon"
+  href="Icones/Image/Z.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -803,6 +818,23 @@
         height:30px;
       }
     }
+
+    .install-btn{
+  height:52px;
+  padding:0 18px;
+  border-radius:16px;
+  border:1px solid rgba(255,216,107,.25);
+  background:linear-gradient(135deg,#ffd86b,#b8860b);
+  color:#111;
+  font-weight:700;
+  font-size:14px;
+  transition:.25s;
+}
+
+.install-btn:hover{
+  transform:translateY(-2px);
+}
+
   </style>
 </head>
 
@@ -851,6 +883,17 @@
 
         <div class="top-actions">
           <input class="search" id="searchInput" placeholder="Buscar produto...">
+          
+          <button class="share-btn" id="installBtn" type="button">
+           <img
+            src="Icones/Icon/download.svg"
+            alt=""
+            class="btn-icon"
+            draggable="false"
+           >
+          </button>
+
+          
           <div class="brand-icon" style="width:52px;height:52px;font-size:24px;">Z</div>
         </div>
       </div>
@@ -1290,7 +1333,52 @@
 
       lastTouchEnd = now;
     }, { passive:false });
+
+    let deferredPrompt = null;
+
+const installBtn = document.getElementById("installBtn");
+
+if(installBtn){
+  installBtn.style.display = "none";
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+
+    deferredPrompt = e;
+    installBtn.style.display = "block";
+  });
+
+  installBtn.addEventListener("click", async () => {
+
+    if(!deferredPrompt){
+      alert("Abra o menu do navegador e toque em Instalar aplicativo.");
+      return;
+    }
+
+    deferredPrompt.prompt();
+
+    await deferredPrompt.userChoice;
+
+    deferredPrompt = null;
+    installBtn.style.display = "none";
+  });
+
+  window.addEventListener("appinstalled", () => {
+    installBtn.style.display = "none";
+  });
+}
+
   </script>
+
+  <script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js");
+    });
+  }
+  
+</script>
+
 
 </body>
 </html>

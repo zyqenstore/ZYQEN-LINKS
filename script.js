@@ -374,27 +374,62 @@ document.head.appendChild(glowStyle);
 
 
 // ==========================================
-// SHARE BUTTON
+// INSTALL APP BUTTON
 // ==========================================
 
-const shareBtn = document.querySelector(".share-btn");
+let deferredPrompt = null;
 
-if (shareBtn) {
+const installBtn = document.getElementById("installBtn");
 
-  shareBtn.addEventListener("click", async () => {
+function isIOS(){
+  return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+}
 
-    try{
-      await navigator.clipboard.writeText(window.location.href);
-      shareBtn.innerHTML = "✔ Copiado";
-    }catch(error){
-      console.error("Erro ao copiar link:", error);
-      shareBtn.innerHTML = "Link copiado";
+function isStandalone(){
+  return window.matchMedia("(display-mode: standalone)").matches ||
+         window.navigator.standalone === true;
+}
+
+if(installBtn){
+
+  installBtn.style.display = "none";
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+
+    deferredPrompt = e;
+
+    if(!isStandalone()){
+      installBtn.style.display = "flex";
+    }
+  });
+
+  installBtn.addEventListener("click", async () => {
+
+    if(isIOS()){
+      alert("Para instalar no iPhone: toque em Compartilhar e depois em Adicionar à Tela de Início.");
+      return;
     }
 
-    setTimeout(() => {
-      shareBtn.innerHTML = "🔗 Copiar link";
-    }, 1800);
+    if(!deferredPrompt){
+      alert("Se o botão de instalar não aparecer, abra o menu do navegador e toque em Instalar app.");
+      return;
+    }
 
+    deferredPrompt.prompt();
+
+    const choiceResult = await deferredPrompt.userChoice;
+
+    if(choiceResult.outcome === "accepted"){
+      installBtn.style.display = "none";
+    }
+
+    deferredPrompt = null;
+  });
+
+  window.addEventListener("appinstalled", () => {
+    installBtn.style.display = "none";
+    deferredPrompt = null;
   });
 }
 

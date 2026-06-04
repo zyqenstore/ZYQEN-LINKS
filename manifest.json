@@ -1,0 +1,25 @@
+{
+  "name": "Zyqen Links",
+  "short_name": "Zyqen",
+  "description": "Produtos virais e ferramentas que realmente valem a pena.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#05010d",
+  "theme_color": "#05010d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "Icones/Image/Zroxo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "Icones/Image/Zroxo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
