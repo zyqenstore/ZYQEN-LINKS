@@ -31,8 +31,13 @@ loader.classList.add("loader-screen");
 
 loader.innerHTML = `
   <div class="loader-logo">
-    <div class="loader-circle"></div>
+
+    <div class="loader-circle">
+      <span>Z</span>
+    </div>
+
     <h1>ZYQEN</h1>
+
   </div>
 `;
 
@@ -61,17 +66,25 @@ const loaderStyle = document.createElement("style");
 loaderStyle.innerHTML = `
 .loader-screen{
   position:fixed;
-  inset:0;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  height:100dvh;
   background:#05010d;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display:grid;
+  place-items:center;
   z-index:999999;
   transition:.7s ease;
 }
 
 .loader-logo{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
   text-align:center;
+  transform:translateY(-25px);
 }
 
 .loader-logo h1{
@@ -82,16 +95,39 @@ loaderStyle.innerHTML = `
 }
 
 .loader-circle{
+  position:relative;
   width:${isMobile ? "78px" : "120px"};
   height:${isMobile ? "78px" : "120px"};
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.loader-circle::before{
+  content:"";
+  position:absolute;
+  inset:0;
   border-radius:50%;
   border:3px solid rgba(168,85,255,.15);
   border-top:3px solid #a855ff;
   animation:spin 1s linear infinite;
 }
 
+.loader-circle span{
+  position:relative;
+  z-index:2;
+  font-size:${isMobile ? "40px" : "56px"};
+  font-weight:800;
+  color:#a855ff;
+  line-height:1;
+  user-select:none;
+}
+
 @keyframes spin{
-  to{ transform:rotate(360deg); }
+  to{
+    transform:rotate(360deg);
+  }
 }
 `;
 

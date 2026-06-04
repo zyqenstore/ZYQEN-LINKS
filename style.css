@@ -208,11 +208,6 @@ body{
   font-weight:700;
 }
 
-/* VERIFIED */
-
-.verified{
-  color:#a855ff;
-}
 
 /* SUB */
 
@@ -754,9 +749,79 @@ body{
   }
 }
 
-/* ==========================================
-   MOBILE PERFORMANCE BOOST
-========================================== */
+.share-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+.btn-icon{
+  width:18px;
+  height:18px;
+  object-fit:contain;
+  flex-shrink:0;
+
+  filter:
+    brightness(0)
+    invert(1);
+}
+
+.social-icon{
+  width:26px;
+  height:26px;
+  object-fit:contain;
+  flex-shrink:0;
+
+  filter:
+    brightness(0)
+    invert(1);
+}
+
+.verified-icon{
+  width:34px;
+  height:34px;
+
+  margin-left:8px;
+
+  position:relative;
+  top:3px;
+
+  object-fit:contain;
+
+  filter:
+    brightness(0)
+    saturate(100%)
+    invert(48%)
+    sepia(95%)
+    saturate(2600%)
+    hue-rotate(235deg)
+    brightness(110%)
+    contrast(110%);
+}
+
+
+/* MOBILE */
+
+@media (max-width:600px){
+
+  .btn-icon{
+    width:15px;
+    height:15px;
+  }
+
+  .social-icon{
+    width:22px;
+    height:22px;
+  }
+
+  .verified-icon{
+    width:26px;
+    height:26px;
+    margin-left:3px;
+  }
+}
+
 
 @media (max-width:600px){
 

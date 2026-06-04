@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
 
-<meta
-  name="viewport"
-  content="width=device-width,
-           initial-scale=1.0,
-           minimum-scale=1.0,
-           maximum-scale=1.0,
-           user-scalable=no,
-           viewport-fit=cover">
+  <meta
+    name="viewport"
+    content="width=device-width,
+             initial-scale=1.0,
+             minimum-scale=1.0,
+             maximum-scale=1.0,
+             user-scalable=no,
+             viewport-fit=cover">
 
   <title>Zyqen Admin</title>
 
@@ -24,6 +24,9 @@
       padding:0;
       box-sizing:border-box;
       -webkit-tap-highlight-color:transparent;
+    }
+
+    button{
       touch-action:manipulation;
     }
 
@@ -121,7 +124,6 @@
       cursor:pointer;
       transition:.25s;
       box-shadow:0 12px 35px rgba(255,215,120,.25);
-      touch-action:manipulation;
     }
 
     .login-btn:hover{
@@ -139,7 +141,6 @@
     @media(max-width:480px){
       body{
         padding:14px;
-        align-items:center;
       }
 
       .login-card{
@@ -258,8 +259,6 @@
       }
     });
 
-
-
     document.addEventListener("wheel", (e) => {
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault();
@@ -273,7 +272,6 @@
         e.preventDefault();
       }
     });
-
 
     document.addEventListener("gesturestart", (e) => {
       e.preventDefault();
@@ -297,12 +295,6 @@
       }
 
       lastTouchEnd = now;
-    }, { passive:false });
-
-    document.addEventListener("touchmove", (e) => {
-      if (e.scale !== undefined && e.scale !== 1) {
-        e.preventDefault();
-      }
     }, { passive:false });
   </script>
 </body>

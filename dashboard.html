@@ -405,14 +405,14 @@
       color:var(--gold);
     }
 
-    .products-list{
-      padding:16px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      max-height:620px;
-      overflow:auto;
-    }
+.products-list{
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  max-height:none;
+  overflow:visible;
+}
 
     .products-list::-webkit-scrollbar{
       width:6px;
@@ -1289,12 +1289,6 @@
       }
 
       lastTouchEnd = now;
-    }, { passive:false });
-
-    document.addEventListener("touchmove", (e) => {
-      if (e.scale !== undefined && e.scale !== 1) {
-        e.preventDefault();
-      }
     }, { passive:false });
   </script>
 
