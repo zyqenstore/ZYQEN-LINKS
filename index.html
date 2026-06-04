@@ -210,6 +210,75 @@
   }
 </script>
 
+<script>
+let deferredPrompt = null;
+
+const installBtn = document.getElementById("installBtn");
+
+if (installBtn) {
+
+  const isIOS =
+    /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+  const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    navigator.standalone;
+
+  installBtn.style.display = "none";
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+
+    e.preventDefault();
+
+    deferredPrompt = e;
+
+    if (!isStandalone) {
+      installBtn.style.display = "flex";
+    }
+
+  });
+
+  if (isIOS && !isStandalone) {
+    installBtn.style.display = "flex";
+  }
+
+  installBtn.addEventListener("click", async () => {
+
+    if (isIOS) {
+
+      alert(
+        "Para instalar o aplicativo:\n\nSafari → Compartilhar → Adicionar à Tela de Início"
+      );
+
+      return;
+    }
+
+    if (!deferredPrompt) {
+
+      alert("Instalação indisponível no momento.");
+
+      return;
+    }
+
+    deferredPrompt.prompt();
+
+    await deferredPrompt.userChoice;
+
+    deferredPrompt = null;
+
+    installBtn.style.display = "none";
+
+  });
+
+  window.addEventListener("appinstalled", () => {
+
+    installBtn.style.display = "none";
+
+  });
+
+}
+</script>
+
 </body>
 
 </html>
