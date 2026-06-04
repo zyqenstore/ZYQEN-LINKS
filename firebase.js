@@ -9,10 +9,10 @@ import {
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBNWB2-5cLGU9SxrYNQseg2YqjSbylvctY",
+  apiKey: "AIzaSyDB3ASQ43YEhMUzw-f-gL8hSxb10Ybxhn8",
   authDomain: "zyqen-links.firebaseapp.com",
   projectId: "zyqen-links",
-  storageBucket: "zyqen-links.appspot.com",
+  storageBucket: "zyqen-links.firebasestorage.app",
   messagingSenderId: "535436335319",
   appId: "1:535436335319:web:a385f91ad7e13fbc683892"
 };
@@ -32,7 +32,6 @@ export const provider = new GoogleAuthProvider();
 provider.setCustomParameters({
   prompt: "select_account"
 });
-
 
 
 export const ADMIN_EMAIL = "kaiccarvalhosouzaa@gmail.com";
