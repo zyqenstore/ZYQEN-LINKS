@@ -9,7 +9,7 @@ import {
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDB3ASQ43YEhMUzw-f-gL8hSxb10Ybxhn8",
+  apiKey: "AIzaSyBQ-9n5L59yBW0FLOw5IlE7WBWGhBxodv4",
   authDomain: "zyqen-links.firebaseapp.com",
   projectId: "zyqen-links",
   storageBucket: "zyqen-links.firebasestorage.app",
