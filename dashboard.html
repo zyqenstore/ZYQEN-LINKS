@@ -884,7 +884,7 @@
         <div class="top-actions">
           <input class="search" id="searchInput" placeholder="Buscar produto...">
           
-          <button class="share-btn" id="installBtn" type="button">
+          <button class="install-btn" id="installBtn" type="button">
            <img
             src="Icones/Icon/download.svg"
             alt=""
@@ -1338,20 +1338,48 @@
 
 const installBtn = document.getElementById("installBtn");
 
-if(installBtn){
+if (installBtn) {
+
+  const isIOS =
+    /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+  const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    navigator.standalone;
+
   installBtn.style.display = "none";
 
   window.addEventListener("beforeinstallprompt", (e) => {
+
     e.preventDefault();
 
     deferredPrompt = e;
-    installBtn.style.display = "block";
+
+    if (!isStandalone) {
+      installBtn.style.display = "block";
+    }
+
   });
+
+  if (isIOS && !isStandalone) {
+    installBtn.style.display = "block";
+  }
 
   installBtn.addEventListener("click", async () => {
 
-    if(!deferredPrompt){
-      alert("Abra o menu do navegador e toque em Instalar aplicativo.");
+    if (isIOS) {
+
+      alert(
+        "Para instalar:\n\nSafari → Compartilhar → Adicionar à Tela de Início"
+      );
+
+      return;
+    }
+
+    if (!deferredPrompt) {
+
+      alert("Instalação indisponível no momento.");
+
       return;
     }
 
@@ -1360,12 +1388,17 @@ if(installBtn){
     await deferredPrompt.userChoice;
 
     deferredPrompt = null;
+
     installBtn.style.display = "none";
+
   });
 
   window.addEventListener("appinstalled", () => {
+
     installBtn.style.display = "none";
+
   });
+
 }
 
   </script>
