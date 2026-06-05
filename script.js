@@ -17,8 +17,82 @@ console.log("Firebase conectado:", db);
 // ==========================================
 
 const isMobile = window.innerWidth <= 768;
-const isSmallMobile = window.innerWidth <= 480;
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+
+// ==========================================
+// CARD LAYOUT SYSTEM
+// ==========================================
+
+const layoutToggle = document.getElementById("layoutToggle");
+const layoutIcon = document.getElementById("layoutIcon");
+
+let currentLayout = localStorage.getItem("zyqen-card-layout") || "list";
+let cachedProducts = [];
+let isChangingLayout = false;
+
+function updateLayoutIcon(){
+  if(!layoutIcon) return;
+
+  if(currentLayout === "list"){
+    layoutIcon.src = "Icones/Icon/layout-grid.svg";
+  }else{
+    layoutIcon.src = "Icones/Icon/layout-list.svg";
+  }
+}
+
+function applyProductsLayout(){
+  const productsContainer = document.querySelector(".products");
+  if(!productsContainer) return;
+
+  productsContainer.classList.toggle("grid-view", currentLayout === "grid");
+  updateLayoutIcon();
+}
+
+if(layoutToggle){
+  layoutToggle.addEventListener("click", () => {
+    if(isChangingLayout) return;
+
+    isChangingLayout = true;
+
+    const cards = document.querySelectorAll(".card");
+
+    cards.forEach((card, index) => {
+      card.classList.remove("slideleft-in", "slideleft-out");
+
+      setTimeout(() => {
+        card.classList.add("slideleft-out");
+      }, index * 35);
+    });
+
+    setTimeout(() => {
+      currentLayout = currentLayout === "list" ? "grid" : "list";
+
+      localStorage.setItem("zyqen-card-layout", currentLayout);
+
+      renderProducts(cachedProducts);
+
+      const newCards = document.querySelectorAll(".card");
+
+      newCards.forEach((card, index) => {
+        card.classList.remove("slideleft-in", "slideleft-out");
+
+        setTimeout(() => {
+          card.classList.add("slideleft-in");
+        }, index * 45);
+
+        setTimeout(() => {
+          card.classList.remove("slideleft-in");
+        }, 650 + (index * 45));
+      });
+
+      setTimeout(() => {
+        isChangingLayout = false;
+      }, 800);
+
+    }, 380);
+  });
+}
 
 
 // ==========================================
@@ -31,13 +105,11 @@ loader.classList.add("loader-screen");
 
 loader.innerHTML = `
   <div class="loader-logo">
-
     <div class="loader-circle">
       <span>Z</span>
     </div>
 
     <h1>ZYQEN</h1>
-
   </div>
 `;
 
@@ -135,25 +207,44 @@ document.head.appendChild(loaderStyle);
 
 
 // ==========================================
+// HELPERS
+// ==========================================
+
+function safeText(value){
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+
+// ==========================================
 // FIREBASE PRODUCTS
 // ==========================================
 
-async function loadProducts() {
+async function loadProducts(){
 
   const productsContainer = document.querySelector(".products");
 
-  if (!productsContainer) {
+  if(!productsContainer){
     console.error("Container .products não encontrado");
     return;
   }
 
   productsContainer.innerHTML = "";
 
-  try {
-
+  try{
     const querySnapshot = await getDocs(collection(db, "products"));
 
-    if(querySnapshot.empty){
+    cachedProducts = [];
+
+    querySnapshot.forEach((docItem) => {
+      cachedProducts.push(docItem.data());
+    });
+
+    if(cachedProducts.length === 0){
       productsContainer.innerHTML = `
         <div class="empty-products">
           Nenhum produto cadastrado ainda.
@@ -162,35 +253,77 @@ async function loadProducts() {
       return;
     }
 
-    const fragment = document.createDocumentFragment();
+    renderProducts(cachedProducts);
 
-    querySnapshot.forEach((docItem, index) => {
+    console.log("Produtos carregados 🚀");
 
-      const product = docItem.data();
+  }catch(error){
+    console.error("Erro Firebase:", error);
 
-      const name = product.name || "Sem nome";
-      const price = product.price || "0";
-      const image = product.image || "https://via.placeholder.com/300";
-      const link = product.link || "#";
+    productsContainer.innerHTML = `
+      <div class="empty-products">
+        Erro ao carregar produtos.
+      </div>
+    `;
+  }
+}
 
-      const card = document.createElement("a");
+function renderProducts(products){
 
-      card.classList.add("card");
+  const productsContainer = document.querySelector(".products");
 
-      card.href = link;
-      card.target = "_blank";
-      card.rel = "noopener noreferrer";
+  if(!productsContainer) return;
 
-      card.style.opacity = "0";
-      card.style.transform = isMobile
-        ? "translateY(18px)"
-        : "translateY(45px) scale(.96)";
+  productsContainer.innerHTML = "";
 
-      card.style.transition = prefersReducedMotion
-        ? "none"
-        : isMobile
-          ? "0.35s ease"
-          : "0.8s cubic-bezier(.22,1,.36,1)";
+  applyProductsLayout();
+
+  const fragment = document.createDocumentFragment();
+
+  products.forEach((product) => {
+
+    const name = safeText(product.name || "Sem nome");
+    const price = safeText(product.price || "0");
+    const image = product.image || "https://via.placeholder.com/300";
+    const link = product.link || "#";
+
+    const card = document.createElement("a");
+
+    card.classList.add("card");
+
+    if(currentLayout === "grid"){
+      card.classList.add("card-square");
+    }
+
+    card.href = link;
+    card.target = "_blank";
+    card.rel = "noopener noreferrer";
+
+    card.style.opacity = "1";
+    card.style.transform = "translateX(0)";
+
+    if(currentLayout === "grid"){
+
+      card.innerHTML = `
+        <div class="square-image">
+          <img src="${image}" alt="${name}" loading="lazy" draggable="false">
+        </div>
+
+        <div class="square-info">
+          <h2>${name}</h2>
+          <p>R$ ${price}</p>
+
+          <div class="buy-btn">
+            <img
+              src="Icones/Icon/shopping-bag.svg"
+              alt=""
+              draggable="false">
+            <span>Comprar</span>
+          </div>
+        </div>
+      `;
+
+    }else{
 
       card.innerHTML = `
         <div class="left">
@@ -206,76 +339,58 @@ async function loadProducts() {
 
         <div class="arrow">›</div>
       `;
+    }
 
-      fragment.appendChild(card);
+    fragment.appendChild(card);
 
-      setTimeout(() => {
-        card.style.opacity = "1";
-        card.style.transform = "translateY(0px) scale(1)";
-      }, prefersReducedMotion ? 0 : 80 + (index * (isMobile ? 45 : 100)));
+    if(!isMobile && !prefersReducedMotion && currentLayout === "list"){
 
-      // TILT 3D APENAS DESKTOP
-      if (!isMobile && !prefersReducedMotion) {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
 
-        card.addEventListener("mousemove", (e) => {
-          const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
+        const rotateX = (y - rect.height / 2) / 18;
+        const rotateY = (rect.width / 2 - x) / 18;
 
-          const rotateX = (y - rect.height / 2) / 18;
-          const rotateY = (rect.width / 2 - x) / 18;
-
-          card.style.transform = `
-            perspective(1200px)
-            rotateX(${rotateX}deg)
-            rotateY(${rotateY}deg)
-            scale(1.02)
-          `;
-        });
-
-        card.addEventListener("mouseleave", () => {
-          card.style.transform = `
-            perspective(1200px)
-            rotateX(0deg)
-            rotateY(0deg)
-            scale(1)
-          `;
-        });
-      }
-
-      // RIPPLE LEVE, SEM ATRAPALHAR SCROLL MOBILE
-      card.addEventListener("click", function (e) {
-        if(prefersReducedMotion) return;
-
-        const ripple = document.createElement("span");
-        ripple.classList.add("ripple");
-
-        this.appendChild(ripple);
-
-        const rect = this.getBoundingClientRect();
-
-        ripple.style.left = `${e.clientX - rect.left}px`;
-        ripple.style.top = `${e.clientY - rect.top}px`;
-
-        setTimeout(() => ripple.remove(), isMobile ? 400 : 700);
+        card.style.transform = `
+          perspective(1200px)
+          rotateX(${rotateX}deg)
+          rotateY(${rotateY}deg)
+          scale(1.02)
+        `;
       });
 
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = `
+          perspective(1200px)
+          rotateX(0deg)
+          rotateY(0deg)
+          scale(1)
+        `;
+      });
+    }
+
+    card.addEventListener("click", function(e){
+      if(prefersReducedMotion) return;
+
+      const ripple = document.createElement("span");
+      ripple.classList.add("ripple");
+
+      this.appendChild(ripple);
+
+      const rect = this.getBoundingClientRect();
+
+      ripple.style.left = `${e.clientX - rect.left}px`;
+      ripple.style.top = `${e.clientY - rect.top}px`;
+
+      setTimeout(() => ripple.remove(), isMobile ? 400 : 700);
     });
 
-    productsContainer.appendChild(fragment);
+  });
 
-    console.log("Produtos carregados 🚀");
-
-  } catch (error) {
-    console.error("Erro Firebase:", error);
-
-    productsContainer.innerHTML = `
-      <div class="empty-products">
-        Erro ao carregar produtos.
-      </div>
-    `;
-  }
+  productsContainer.appendChild(fragment);
 }
 
 loadProducts();
@@ -328,7 +443,7 @@ document.head.appendChild(rippleStyle);
 // GLOW MOUSE - DESKTOP ONLY
 // ==========================================
 
-if (!isMobile && !prefersReducedMotion) {
+if(!isMobile && !prefersReducedMotion){
 
   const glow = document.createElement("div");
   glow.classList.add("mouse-glow");
@@ -404,6 +519,10 @@ if(installBtn){
     }
   });
 
+  if(isIOS() && !isStandalone()){
+    installBtn.style.display = "flex";
+  }
+
   installBtn.addEventListener("click", async () => {
 
     if(isIOS()){
@@ -439,7 +558,7 @@ if(installBtn){
 // ==========================================
 
 document.addEventListener("wheel", (e) => {
-  if (e.ctrlKey || e.metaKey) {
+  if(e.ctrlKey || e.metaKey){
     e.preventDefault();
   }
 }, { passive:false });
@@ -448,10 +567,7 @@ document.addEventListener("keydown", (e) => {
 
   const blockedKeys = ["+", "-", "=", "0"];
 
-  if (
-    (e.ctrlKey || e.metaKey) &&
-    blockedKeys.includes(e.key)
-  ) {
+  if((e.ctrlKey || e.metaKey) && blockedKeys.includes(e.key)){
     e.preventDefault();
   }
 
@@ -484,7 +600,7 @@ let lastTouchEnd = 0;
 document.addEventListener("touchend", (e) => {
   const now = Date.now();
 
-  if (now - lastTouchEnd <= 300) {
+  if(now - lastTouchEnd <= 300){
     e.preventDefault();
   }
 
@@ -496,4 +612,4 @@ document.addEventListener("touchend", (e) => {
 // FINAL
 // ==========================================
 
-console.log("ZYQEN ULTRA PREMIUM OTIMIZADO 🚀");
+console.log("ZYQEN CARD LAYOUT SYSTEM ATIVO 🚀");

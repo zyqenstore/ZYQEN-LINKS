@@ -38,6 +38,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 </head>
@@ -85,14 +86,16 @@
 
       </div>
 
-<button class="share-btn" id="installBtn" type="button">
-  <img
-    src="Icones/Icon/download.svg"
-    alt=""
-    class="btn-icon"
-    draggable="false"
-  >
-</button>
+      <button class="share-btn" id="installBtn" type="button">
+
+        <img
+          src="Icones/Icon/download.svg"
+          alt=""
+          class="btn-icon"
+          draggable="false"
+        >
+
+      </button>
 
     </header>
 
@@ -175,13 +178,29 @@
 
       <div class="section-title">
 
-        <h3>Produtos Recomendados</h3>
+        <div>
+          <h3>Produtos Recomendados</h3>
+          <span></span>
+        </div>
 
-        <span></span>
+        <button
+          class="layout-toggle"
+          id="layoutToggle"
+          type="button"
+          aria-label="Trocar visual dos cards">
+
+          <img
+            src="Icones/Icon/layout-grid.svg"
+            alt=""
+            id="layoutIcon"
+            draggable="false"
+          >
+
+        </button>
 
       </div>
 
-      <div class="products">
+      <div class="products" id="products">
 
         <!-- Firebase -->
 
@@ -203,82 +222,79 @@
   <script type="module" src="script.js"></script>
 
   <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js");
-    });
-  }
-  
-
-let deferredPrompt = null;
-
-const installBtn = document.getElementById("installBtn");
-
-if (installBtn) {
-
-  const isIOS =
-    /iphone|ipad|ipod/i.test(navigator.userAgent);
-
-  const isStandalone =
-    window.matchMedia("(display-mode: standalone)").matches ||
-    navigator.standalone;
-
-  installBtn.style.display = "none";
-
-  window.addEventListener("beforeinstallprompt", (e) => {
-
-    e.preventDefault();
-
-    deferredPrompt = e;
-
-    if (!isStandalone) {
-      installBtn.style.display = "flex";
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js");
+      });
     }
 
-  });
+    let deferredPrompt = null;
 
-  if (isIOS && !isStandalone) {
-    installBtn.style.display = "flex";
-  }
+    const installBtn = document.getElementById("installBtn");
 
-  installBtn.addEventListener("click", async () => {
+    if (installBtn) {
 
-    if (isIOS) {
+      const isIOS =
+        /iphone|ipad|ipod/i.test(navigator.userAgent);
 
-      alert(
-        "Para instalar o aplicativo:\n\nSafari → Compartilhar → Adicionar à Tela de Início"
-      );
+      const isStandalone =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        navigator.standalone;
 
-      return;
+      installBtn.style.display = "none";
+
+      window.addEventListener("beforeinstallprompt", (e) => {
+
+        e.preventDefault();
+
+        deferredPrompt = e;
+
+        if (!isStandalone) {
+          installBtn.style.display = "flex";
+        }
+
+      });
+
+      if (isIOS && !isStandalone) {
+        installBtn.style.display = "flex";
+      }
+
+      installBtn.addEventListener("click", async () => {
+
+        if (isIOS) {
+
+          alert(
+            "Para instalar o aplicativo:\n\nSafari → Compartilhar → Adicionar à Tela de Início"
+          );
+
+          return;
+        }
+
+        if (!deferredPrompt) {
+
+          alert("Instalação indisponível no momento.");
+
+          return;
+        }
+
+        deferredPrompt.prompt();
+
+        await deferredPrompt.userChoice;
+
+        deferredPrompt = null;
+
+        installBtn.style.display = "none";
+
+      });
+
+      window.addEventListener("appinstalled", () => {
+
+        installBtn.style.display = "none";
+
+      });
+
     }
-
-    if (!deferredPrompt) {
-
-      alert("Instalação indisponível no momento.");
-
-      return;
-    }
-
-    deferredPrompt.prompt();
-
-    await deferredPrompt.userChoice;
-
-    deferredPrompt = null;
-
-    installBtn.style.display = "none";
-
-  });
-
-  window.addEventListener("appinstalled", () => {
-
-    installBtn.style.display = "none";
-
-  });
-
-}
-</script>
-
-
+  </script>
 
 </body>
 

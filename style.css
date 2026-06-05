@@ -930,3 +930,216 @@ body{
     display:none !important;
   }
 }
+
+/* BOTÃO TROCAR LAYOUT */
+
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.layout-toggle{
+  width:46px;
+  height:46px;
+  border-radius:15px;
+  border:1px solid rgba(168,85,255,.35);
+  background:rgba(255,255,255,.05);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.layout-toggle:hover{
+  transform:translateY(-3px);
+  background:rgba(168,85,255,.18);
+  box-shadow:0 0 25px rgba(168,85,255,.25);
+}
+
+.layout-toggle img{
+  width:21px;
+  height:21px;
+  filter:brightness(0) invert(1);
+}
+
+/* MODO GRADE */
+
+.products.grid-view{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+
+.card-square{
+  flex-direction:column;
+  align-items:stretch;
+  padding:0;
+  border-radius:26px;
+  overflow:hidden;
+}
+
+.card-square::before{
+  display:none;
+}
+
+.square-image{
+  width:100%;
+  height:190px;
+  background:rgba(255,255,255,.05);
+  overflow:hidden;
+}
+
+.square-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.square-info{
+  padding:16px;
+}
+
+.square-info h2{
+  font-size:17px;
+  line-height:1.25;
+  margin-bottom:8px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.square-info p{
+  color:#cfcfcf;
+  font-size:14px;
+  margin-bottom:14px;
+}
+
+.buy-btn{
+  width:100%;
+  height:44px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#a855ff,#5b00ff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  color:white;
+  font-weight:700;
+  font-size:13px;
+  box-shadow:0 0 22px rgba(168,85,255,.25);
+}
+
+.buy-btn img{
+  width:17px;
+  height:17px;
+  filter:brightness(0) invert(1);
+}
+
+/* CELULAR */
+
+@media(max-width:600px){
+
+  .section-title{
+    margin-bottom:14px;
+  }
+
+  .layout-toggle{
+    width:42px;
+    height:42px;
+    border-radius:14px;
+  }
+
+  .layout-toggle img{
+    width:19px;
+    height:19px;
+  }
+
+  .products.grid-view{
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+  }
+
+  .card-square{
+    border-radius:18px;
+  }
+
+  .square-image{
+    height:135px;
+  }
+
+  .square-info{
+    padding:10px;
+  }
+
+  .square-info h2{
+    font-size:12px;
+    margin-bottom:6px;
+  }
+
+  .square-info p{
+    font-size:11px;
+    margin-bottom:9px;
+  }
+
+  .buy-btn{
+    height:36px;
+    border-radius:11px;
+    font-size:11px;
+  }
+
+  .buy-btn img{
+    width:14px;
+    height:14px;
+  }
+}
+
+@media(max-width:360px){
+
+  .products.grid-view{
+    gap:8px;
+  }
+
+  .square-image{
+    height:120px;
+  }
+
+  .square-info h2{
+    font-size:11px;
+  }
+
+  .buy-btn{
+    height:34px;
+    font-size:10px;
+  }
+}
+
+.slideleft-out{
+  animation:slideLeftOut .3s ease forwards;
+}
+
+.slideleft-in{
+  animation:slideLeftIn .45s cubic-bezier(.22,1,.36,1) forwards;
+}
+
+@keyframes slideLeftOut{
+  to{
+    opacity:0;
+    transform:translateX(-28px);
+  }
+}
+
+@keyframes slideLeftIn{
+  from{
+    opacity:0;
+    transform:translateX(28px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
