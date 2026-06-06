@@ -24,10 +24,11 @@
   <meta name="apple-mobile-web-app-title" content="Zyqen Admin">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="studio.css">
 
   <style>
     *{
@@ -779,7 +780,7 @@
         border:1px solid rgba(255,255,255,.1);
         backdrop-filter:blur(24px);
         display:grid;
-        grid-template-columns:repeat(4,1fr);
+        grid-template-columns:repeat(5,1fr);
         z-index:50;
         box-shadow:0 20px 70px rgba(0,0,0,.45);
       }
@@ -993,6 +994,7 @@
         <nav>
           <div class="nav-item" data-page="overview">⌂ Visão Geral</div>
           <div class="nav-item active" data-page="products">▱ Produtos</div>
+          <div class="nav-item" data-page="studio">🎨 Studio</div>
           <div class="nav-item" data-page="stats">▥ Estatísticas</div>
           <div class="nav-item" data-page="settings">⚙ Configurações</div>
         </nav>
@@ -1047,6 +1049,8 @@
   </div>
 
   <div class="toast" id="toast"></div>
+
+  <script type="module" src="studio.js"></script>
 
   <script type="module">
     import { auth, db, ADMIN_EMAIL } from "./firebase.js";
@@ -1236,29 +1240,35 @@
     }
 
     function renderStudio(){
-  currentPage = "studio";
-  setActivePage("studio");
-  pageTitle.textContent = "Studio";
-  pageSubtitle.textContent = "Crie artes para postar";
-  searchInput.style.display = "none";
-  contentGrid.className = "content-grid single-grid";
+      currentPage = "studio";
+      setActivePage("studio");
+      pageTitle.textContent = "Studio";
+      pageSubtitle.textContent = "Crie artes para postar";
+      searchInput.style.display = "none";
+      contentGrid.className = "content-grid single-grid";
 
-  contentGrid.innerHTML = `
-    <section class="card">
-      <div class="card-header">
-        <div class="card-title">🎨 Zyqen Studio</div>
-      </div>
+      contentGrid.innerHTML = `
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">🎨 Zyqen Studio</div>
+          </div>
 
-      <div id="studioRoot"></div>
-    </section>
-  `;
+          <div id="studioRoot"></div>
+        </section>
+      `;
 
-  if(window.initZyqenStudio){
-    window.initZyqenStudio(allProducts);
-  }
+      if(window.initZyqenStudio){
+        window.initZyqenStudio(allProducts);
+      }else{
+        document.getElementById("studioRoot").innerHTML = `
+          <div class="form">
+            <p class="hint">studio.js ainda não carregou ou não possui window.initZyqenStudio.</p>
+          </div>
+        `;
+      }
 
-  afterPageChange();
-}
+      afterPageChange();
+    }
 
     function renderProductsLayout(){
       currentPage = "products";
@@ -1529,7 +1539,6 @@
     const installBtn = document.getElementById("installBtn");
 
     if (installBtn) {
-
       const isIOS =
         /iphone|ipad|ipod/i.test(navigator.userAgent);
 
@@ -1578,8 +1587,6 @@
         installBtn.style.display = "none";
       });
     }
-
-    
   </script>
 
   <script>
@@ -1589,9 +1596,6 @@
       });
     }
   </script>
-
-  
-  <script type="module" src="studio.js"></script>
 
 </body>
 </html>
