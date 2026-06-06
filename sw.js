@@ -9,6 +9,8 @@ const FILES_TO_CACHE = [
   "./script.js",
   "./manifest.json",
   "./manifest-admin.json",
+  "./studio.css",
+  "./studio.js",
   "./Icones/Image/Zroxo.png",
   "./Icones/Image/Z.png",
   "./Icones/Icon/link.svg",
