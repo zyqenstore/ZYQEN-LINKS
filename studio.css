@@ -46,6 +46,11 @@
   font-size:13px;
 }
 
+.studio-field input[type="file"]{
+  height:auto;
+  padding:12px;
+}
+
 .studio-field select option{
   background:#111;
   color:#fff;
@@ -76,6 +81,12 @@
 .studio-btn.main{
   background:linear-gradient(135deg,#ffd86b,#b8860b);
   color:#111;
+}
+
+.studio-btn.save{
+  background:linear-gradient(135deg,#a855ff,#5b00ff);
+  color:#fff;
+  border-color:rgba(168,85,255,.35);
 }
 
 .studio-hint{
@@ -139,6 +150,8 @@
   background:#111;
 }
 
+/* TABLET */
+
 @media(max-width:1100px){
   .studio-wrap{
     grid-template-columns:1fr;
@@ -161,21 +174,115 @@
   }
 }
 
-@media(max-width:520px){
-  .studio-grid-2,
-  .studio-actions{
-    grid-template-columns:1fr;
+/* CELULAR */
+
+@media(max-width:720px){
+  .studio-wrap{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    padding:12px;
+  }
+
+  .studio-preview-area{
+    order:-1;
+    padding:12px;
+    border-radius:20px;
+  }
+
+  .studio-preview-top{
+    margin-bottom:10px;
+  }
+
+  .studio-preview-top strong{
+    font-size:14px;
+  }
+
+  .studio-preview-top span{
+    font-size:10px;
+  }
+
+  .studio-preview-box{
+    height:380px;
+    min-height:380px;
+    max-height:380px;
+    padding:12px;
+    overflow:auto;
+    align-items:flex-start;
+  }
+
+  #studioCanvas{
+    width:auto;
+    height:auto;
+    max-width:230px;
+    max-height:340px;
+    border-radius:16px;
   }
 
   .studio-panel{
     padding:14px;
+    border-radius:20px;
   }
 
-  .studio-preview-area{
-    padding:12px;
+  .studio-field{
+    margin-bottom:12px;
+  }
+
+  .studio-field label{
+    font-size:12px;
+  }
+
+  .studio-field input,
+  .studio-field select{
+    height:48px;
+    font-size:13px;
+    border-radius:14px;
+  }
+
+  .studio-grid-2{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .studio-actions{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .studio-btn{
+    height:52px;
+    border-radius:15px;
+    font-size:14px;
+  }
+
+  .studio-hint{
+    font-size:11px;
+  }
+}
+
+/* CELULAR PEQUENO */
+
+@media(max-width:420px){
+  .studio-wrap{
+    padding:10px;
+  }
+
+  .studio-preview-box{
+    height:340px;
+    min-height:340px;
+    max-height:340px;
   }
 
   #studioCanvas{
-    max-width:310px;
+    max-width:200px;
+    max-height:305px;
+  }
+
+  .studio-grid-2{
+    grid-template-columns:1fr;
+  }
+
+  .studio-panel{
+    padding:12px;
   }
 }

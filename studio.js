@@ -3,6 +3,9 @@ window.initZyqenStudio = function(products = []){
   const root = document.getElementById("studioRoot");
   if(!root) return;
 
+  let uploadedImageData = null;
+  let lastGeneratedBlob = null;
+
   root.innerHTML = `
     <div class="studio-wrap">
 
@@ -59,8 +62,13 @@ window.initZyqenStudio = function(products = []){
         </div>
 
         <div class="studio-field">
-          <label>Imagem do produto</label>
+          <label>Imagem por link</label>
           <input id="studioImage" placeholder="URL da imagem">
+        </div>
+
+        <div class="studio-field">
+          <label>Ou enviar imagem do celular</label>
+          <input id="studioUpload" type="file" accept="image/*">
         </div>
 
         <div class="studio-field">
@@ -71,10 +79,11 @@ window.initZyqenStudio = function(products = []){
         <div class="studio-actions">
           <button class="studio-btn" id="studioPreviewBtn">Atualizar</button>
           <button class="studio-btn main" id="studioDownloadBtn">Baixar PNG</button>
+          <button class="studio-btn save" id="studioOpenBtn">Abrir imagem</button>
         </div>
 
         <p class="studio-hint">
-          A imagem não é salva no Firebase. Ela é usada apenas no navegador para gerar o PNG.
+          No celular, prefira enviar a imagem pelo botão de arquivo. Links do Google, Brave, Shopee ou Mercado Livre podem bloquear a prévia.
         </p>
 
       </div>
@@ -100,9 +109,11 @@ window.initZyqenStudio = function(products = []){
   const priceInput = document.getElementById("studioPrice");
   const oldPriceInput = document.getElementById("studioOldPrice");
   const imageInput = document.getElementById("studioImage");
+  const uploadInput = document.getElementById("studioUpload");
   const tagInput = document.getElementById("studioTag");
   const previewBtn = document.getElementById("studioPreviewBtn");
   const downloadBtn = document.getElementById("studioDownloadBtn");
+  const openBtn = document.getElementById("studioOpenBtn");
   const sizeText = document.getElementById("studioSizeText");
   const canvas = document.getElementById("studioCanvas");
   const ctx = canvas.getContext("2d");
@@ -154,7 +165,10 @@ window.initZyqenStudio = function(products = []){
       }
 
       const img = new Image();
-      img.crossOrigin = "anonymous";
+
+      if(!src.startsWith("data:") && !src.startsWith("blob:")){
+        img.crossOrigin = "anonymous";
+      }
 
       img.onload = () => resolve(img);
       img.onerror = () => resolve(null);
@@ -261,7 +275,7 @@ window.initZyqenStudio = function(products = []){
     const price = money(priceInput.value || "37,99");
     const oldPrice = money(oldPriceInput.value || "99,90");
     const tag = tagInput.value || "PRODUTO VIRAL";
-    const imageUrl = imageInput.value;
+    const imageUrl = uploadedImageData || imageInput.value;
 
     drawBackground(template,w,h);
 
@@ -312,6 +326,13 @@ window.initZyqenStudio = function(products = []){
     ctx.textAlign = "center";
     ctx.fillText("COMPRAR AGORA",w / 2,baseY + 442);
     ctx.textAlign = "left";
+
+    await new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        lastGeneratedBlob = blob;
+        resolve();
+      }, "image/png");
+    });
   }
 
   productSelect.addEventListener("change", () => {
@@ -323,7 +344,25 @@ window.initZyqenStudio = function(products = []){
     priceInput.value = selected.price || "";
     imageInput.value = selected.image || "";
 
+    uploadedImageData = null;
+    uploadInput.value = "";
+
     renderStudio();
+  });
+
+  uploadInput.addEventListener("change", () => {
+    const file = uploadInput.files && uploadInput.files[0];
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      uploadedImageData = reader.result;
+      renderStudio();
+    };
+
+    reader.readAsDataURL(file);
   });
 
   [
@@ -335,7 +374,15 @@ window.initZyqenStudio = function(products = []){
     imageInput,
     tagInput
   ].forEach(el => {
-    el.addEventListener("input", renderStudio);
+    el.addEventListener("input", () => {
+      if(el === imageInput){
+        uploadedImageData = null;
+        uploadInput.value = "";
+      }
+
+      renderStudio();
+    });
+
     el.addEventListener("change", renderStudio);
   });
 
@@ -345,12 +392,45 @@ window.initZyqenStudio = function(products = []){
     await renderStudio();
 
     try{
+      const blob = lastGeneratedBlob;
+
+      if(!blob){
+        alert("Não foi possível gerar a imagem.");
+        return;
+      }
+
+      const url = URL.createObjectURL(blob);
+
       const link = document.createElement("a");
+      link.href = url;
       link.download = "zyqen-anuncio.png";
-      link.href = canvas.toDataURL("image/png");
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
+
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 1000);
+
     }catch(error){
-      alert("Não foi possível baixar. Use imagem com link direto ou hospedada no Firebase.");
+      alert("Se não baixar no celular, toque em 'Abrir imagem' e salve pela galeria.");
+    }
+  });
+
+  openBtn.addEventListener("click", async () => {
+    await renderStudio();
+
+    if(!lastGeneratedBlob){
+      alert("Não foi possível gerar a imagem.");
+      return;
+    }
+
+    const url = URL.createObjectURL(lastGeneratedBlob);
+
+    const newWindow = window.open(url, "_blank");
+
+    if(!newWindow){
+      alert("Permita pop-ups ou segure na imagem da prévia para salvar.");
     }
   });
 
