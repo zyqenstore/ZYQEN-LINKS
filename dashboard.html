@@ -24,6 +24,7 @@
   <meta name="apple-mobile-web-app-title" content="Zyqen Admin">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
+  <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -969,6 +970,7 @@
       <nav>
         <div class="nav-item" data-page="overview">⌂ Visão Geral</div>
         <div class="nav-item active" data-page="products">▱ Produtos</div>
+        <div class="nav-item" data-page="studio">🎨 Studio</div>
         <div class="nav-item" data-page="stats">▥ Estatísticas</div>
         <div class="nav-item" data-page="settings">⚙ Configurações</div>
       </nav>
@@ -1039,6 +1041,7 @@
   <div class="bottom-nav">
     <div data-page="overview">⌂<span>Início</span></div>
     <div class="active" data-page="products">▱<span>Produtos</span></div>
+    <div data-page="studio">🎨<span>Studio</span></div>
     <div data-page="stats">▥<span>Stats</span></div>
     <div data-page="settings">⚙<span>Config.</span></div>
   </div>
@@ -1231,6 +1234,31 @@
       document.getElementById("settingsLogoutBtn").onclick = logoutAdmin;
       afterPageChange();
     }
+
+    function renderStudio(){
+  currentPage = "studio";
+  setActivePage("studio");
+  pageTitle.textContent = "Studio";
+  pageSubtitle.textContent = "Crie artes para postar";
+  searchInput.style.display = "none";
+  contentGrid.className = "content-grid single-grid";
+
+  contentGrid.innerHTML = `
+    <section class="card">
+      <div class="card-header">
+        <div class="card-title">🎨 Zyqen Studio</div>
+      </div>
+
+      <div id="studioRoot"></div>
+    </section>
+  `;
+
+  if(window.initZyqenStudio){
+    window.initZyqenStudio(allProducts);
+  }
+
+  afterPageChange();
+}
 
     function renderProductsLayout(){
       currentPage = "products";
@@ -1439,6 +1467,7 @@
 
         if(page === "overview") renderOverview();
         if(page === "products") renderProductsLayout();
+        if(page === "studio") renderStudio();
         if(page === "stats") renderStats();
         if(page === "settings") renderSettings();
       });
@@ -1549,6 +1578,8 @@
         installBtn.style.display = "none";
       });
     }
+
+    
   </script>
 
   <script>
@@ -1558,6 +1589,9 @@
       });
     }
   </script>
+
+  
+  <script type="module" src="studio.js"></script>
 
 </body>
 </html>
