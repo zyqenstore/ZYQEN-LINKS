@@ -40,6 +40,9 @@ window.initZyqenStudio = function(products = []){
               <option value="viral">Viral Roxo</option>
               <option value="gold">Oferta Gold</option>
               <option value="dark">Dark Premium</option>
+              <option value="clean">Clean Branco</option>
+              <option value="shop">Loja Oferta</option>
+              <option value="neon">Neon Tech</option>
             </select>
           </div>
         </div>
@@ -76,10 +79,36 @@ window.initZyqenStudio = function(products = []){
           <input id="studioTag" value="PRODUTO VIRAL">
         </div>
 
+        <div class="studio-grid-2">
+          <div class="studio-field">
+            <label>Mostrar botão?</label>
+            <select id="studioShowButton">
+              <option value="yes">Sim</option>
+              <option value="no">Não</option>
+            </select>
+          </div>
+
+          <div class="studio-field">
+            <label>Texto do botão</label>
+            <input id="studioButtonText" value="COMPRAR AGORA">
+          </div>
+        </div>
+
+        <div class="studio-field">
+          <label>Link do produto</label>
+          <input id="studioProductLink" placeholder="https://seulink.com">
+        </div>
+
+        <div class="studio-field">
+          <label>Legenda pronta</label>
+          <input id="studioCaption" placeholder="Clique no link da bio e confira!">
+        </div>
+
         <div class="studio-actions">
           <button class="studio-btn" id="studioPreviewBtn">Atualizar</button>
           <button class="studio-btn main" id="studioDownloadBtn">Baixar PNG</button>
           <button class="studio-btn save" id="studioOpenBtn">Abrir imagem</button>
+          <button class="studio-btn" id="studioCopyCaptionBtn">Copiar legenda</button>
         </div>
 
         <p class="studio-hint">
@@ -111,9 +140,14 @@ window.initZyqenStudio = function(products = []){
   const imageInput = document.getElementById("studioImage");
   const uploadInput = document.getElementById("studioUpload");
   const tagInput = document.getElementById("studioTag");
+  const showButtonInput = document.getElementById("studioShowButton");
+  const buttonTextInput = document.getElementById("studioButtonText");
+  const productLinkInput = document.getElementById("studioProductLink");
+  const captionInput = document.getElementById("studioCaption");
   const previewBtn = document.getElementById("studioPreviewBtn");
   const downloadBtn = document.getElementById("studioDownloadBtn");
   const openBtn = document.getElementById("studioOpenBtn");
+  const copyCaptionBtn = document.getElementById("studioCopyCaptionBtn");
   const sizeText = document.getElementById("studioSizeText");
   const canvas = document.getElementById("studioCanvas");
   const ctx = canvas.getContext("2d");
@@ -188,6 +222,18 @@ window.initZyqenStudio = function(products = []){
       gradient.addColorStop(0,"#020202");
       gradient.addColorStop(.5,"#111");
       gradient.addColorStop(1,"#292929");
+    }else if(template === "clean"){
+      gradient.addColorStop(0,"#f7f7f7");
+      gradient.addColorStop(.5,"#ffffff");
+      gradient.addColorStop(1,"#e8e8e8");
+    }else if(template === "shop"){
+      gradient.addColorStop(0,"#ff4d00");
+      gradient.addColorStop(.5,"#120600");
+      gradient.addColorStop(1,"#ffb000");
+    }else if(template === "neon"){
+      gradient.addColorStop(0,"#00111f");
+      gradient.addColorStop(.5,"#05010d");
+      gradient.addColorStop(1,"#00d4ff");
     }else{
       gradient.addColorStop(0,"#1c0030");
       gradient.addColorStop(.5,"#070012");
@@ -197,8 +243,8 @@ window.initZyqenStudio = function(products = []){
     ctx.fillStyle = gradient;
     ctx.fillRect(0,0,w,h);
 
-    ctx.globalAlpha = .18;
-    ctx.strokeStyle = "#ffffff";
+    ctx.globalAlpha = template === "clean" ? .08 : .18;
+    ctx.strokeStyle = template === "clean" ? "#111" : "#ffffff";
     ctx.lineWidth = 2;
 
     for(let i = 0; i < 16; i++){
@@ -208,8 +254,8 @@ window.initZyqenStudio = function(products = []){
       ctx.stroke();
     }
 
-    ctx.globalAlpha = .18;
-    ctx.fillStyle = "#ffffff";
+    ctx.globalAlpha = template === "clean" ? .08 : .18;
+    ctx.fillStyle = template === "clean" ? "#111" : "#ffffff";
 
     for(let i = 0; i < 34; i++){
       const x = Math.random() * w;
@@ -259,12 +305,83 @@ window.initZyqenStudio = function(products = []){
     ctx.shadowOffsetY = 0;
   }
 
+  function getThemeColors(template){
+    if(template === "clean"){
+      return {
+        title:"#111111",
+        text:"#333333",
+        muted:"#666666",
+        accent:"#5b00ff",
+        button:"#5b00ff",
+        buttonText:"#ffffff",
+        glass:"rgba(0,0,0,.055)"
+      };
+    }
+
+    if(template === "gold"){
+      return {
+        title:"#ffffff",
+        text:"#ffffff",
+        muted:"#bfbfbf",
+        accent:"#ffd86b",
+        button:"#ffd86b",
+        buttonText:"#111111",
+        glass:"rgba(255,255,255,.09)"
+      };
+    }
+
+    if(template === "shop"){
+      return {
+        title:"#ffffff",
+        text:"#ffffff",
+        muted:"#ffe1c7",
+        accent:"#ffd86b",
+        button:"#ff4d00",
+        buttonText:"#ffffff",
+        glass:"rgba(255,255,255,.10)"
+      };
+    }
+
+    if(template === "neon"){
+      return {
+        title:"#ffffff",
+        text:"#ffffff",
+        muted:"#bcefff",
+        accent:"#00d4ff",
+        button:"#00d4ff",
+        buttonText:"#00111f",
+        glass:"rgba(255,255,255,.08)"
+      };
+    }
+
+    return {
+      title:"#ffffff",
+      text:"#ffffff",
+      muted:"#aaaaaa",
+      accent:"#ffd86b",
+      button:"#a855ff",
+      buttonText:"#111111",
+      glass:"rgba(255,255,255,.09)"
+    };
+  }
+
+  function generateCaption(){
+    const name = nameInput.value || "esse produto";
+    const price = money(priceInput.value || "37,99");
+    const link = productLinkInput.value.trim();
+
+    const caption = `🔥 ${name}\n\nPor apenas ${price}\n\nConfira agora na Zyqen.\n${link ? link : "Link na bio."}`;
+
+    captionInput.value = caption;
+  }
+
   async function renderStudio(){
     const format = formatInput.value;
     const template = templateInput.value;
 
     const w = 1080;
     const h = format === "post" ? 1080 : 1920;
+    const colors = getThemeColors(template);
 
     canvas.width = w;
     canvas.height = h;
@@ -276,18 +393,20 @@ window.initZyqenStudio = function(products = []){
     const oldPrice = money(oldPriceInput.value || "99,90");
     const tag = tagInput.value || "PRODUTO VIRAL";
     const imageUrl = uploadedImageData || imageInput.value;
+    const showButton = showButtonInput.value === "yes";
+    const buttonText = buttonTextInput.value || "COMPRAR AGORA";
 
     drawBackground(template,w,h);
 
-    ctx.fillStyle = "rgba(255,255,255,.09)";
+    ctx.fillStyle = colors.glass;
     roundRect(70,70,w - 140,h - 140,42);
     ctx.fill();
 
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = colors.title;
     ctx.font = "900 56px Poppins, Arial";
     ctx.fillText("ZYQEN",90,145);
 
-    ctx.fillStyle = "#ffd86b";
+    ctx.fillStyle = colors.accent;
     ctx.font = "900 38px Poppins, Arial";
     ctx.fillText(tag.toUpperCase(),90,215);
 
@@ -296,11 +415,11 @@ window.initZyqenStudio = function(products = []){
 
     const baseY = format === "post" ? 705 : 1225;
 
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle = colors.title;
     ctx.font = "900 70px Poppins, Arial";
     wrapText(name.toUpperCase(),90,baseY,w - 180,78);
 
-    ctx.fillStyle = "#aaa";
+    ctx.fillStyle = colors.muted;
     ctx.font = "700 38px Poppins, Arial";
     ctx.fillText(`De ${oldPrice}`,90,baseY + 175);
 
@@ -311,21 +430,25 @@ window.initZyqenStudio = function(products = []){
     ctx.lineTo(350,baseY + 160);
     ctx.stroke();
 
-    ctx.fillStyle = "#ffd86b";
+    ctx.fillStyle = colors.accent;
     ctx.font = "900 106px Poppins, Arial";
     ctx.fillText(price,90,baseY + 300);
 
-    const btnColor = template === "gold" ? "#ffd86b" : "#a855ff";
+    if(showButton){
+      ctx.fillStyle = colors.button;
+      roundRect(90,baseY + 380,w - 180,96,28);
+      ctx.fill();
 
-    ctx.fillStyle = btnColor;
-    roundRect(90,baseY + 380,w - 180,96,28);
-    ctx.fill();
-
-    ctx.fillStyle = "#111";
-    ctx.font = "900 38px Poppins, Arial";
-    ctx.textAlign = "center";
-    ctx.fillText("COMPRAR AGORA",w / 2,baseY + 442);
-    ctx.textAlign = "left";
+      ctx.fillStyle = colors.buttonText;
+      ctx.font = "900 38px Poppins, Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(buttonText.toUpperCase(),w / 2,baseY + 442);
+      ctx.textAlign = "left";
+    }else{
+      ctx.fillStyle = colors.muted;
+      ctx.font = "700 34px Poppins, Arial";
+      ctx.fillText("ACESSE O LINK NA BIO",90,baseY + 410);
+    }
 
     await new Promise((resolve) => {
       canvas.toBlob((blob) => {
@@ -343,10 +466,12 @@ window.initZyqenStudio = function(products = []){
     nameInput.value = selected.name || "";
     priceInput.value = selected.price || "";
     imageInput.value = selected.image || "";
+    productLinkInput.value = selected.link || "";
 
     uploadedImageData = null;
     uploadInput.value = "";
 
+    generateCaption();
     renderStudio();
   });
 
@@ -372,7 +497,10 @@ window.initZyqenStudio = function(products = []){
     priceInput,
     oldPriceInput,
     imageInput,
-    tagInput
+    tagInput,
+    showButtonInput,
+    buttonTextInput,
+    productLinkInput
   ].forEach(el => {
     el.addEventListener("input", () => {
       if(el === imageInput){
@@ -380,10 +508,14 @@ window.initZyqenStudio = function(products = []){
         uploadInput.value = "";
       }
 
+      generateCaption();
       renderStudio();
     });
 
-    el.addEventListener("change", renderStudio);
+    el.addEventListener("change", () => {
+      generateCaption();
+      renderStudio();
+    });
   });
 
   previewBtn.addEventListener("click", renderStudio);
@@ -434,5 +566,19 @@ window.initZyqenStudio = function(products = []){
     }
   });
 
+  copyCaptionBtn.addEventListener("click", async () => {
+    generateCaption();
+
+    try{
+      await navigator.clipboard.writeText(captionInput.value);
+      alert("Legenda copiada.");
+    }catch(error){
+      captionInput.select();
+      document.execCommand("copy");
+      alert("Legenda copiada.");
+    }
+  });
+
+  generateCaption();
   renderStudio();
 };
