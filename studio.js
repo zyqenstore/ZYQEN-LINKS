@@ -8,6 +8,8 @@ window.initZyqenStudio = function(products = []){
 
       <div class="studio-panel">
 
+        <div class="studio-section-title">⚙️ Configurações da arte</div>
+
         <div class="studio-field">
           <label>Selecionar produto</label>
           <select id="studioProduct">
@@ -20,21 +22,23 @@ window.initZyqenStudio = function(products = []){
           </select>
         </div>
 
-        <div class="studio-field">
-          <label>Formato</label>
-          <select id="studioFormat">
-            <option value="story">Story 1080x1920</option>
-            <option value="post">Post 1080x1080</option>
-          </select>
-        </div>
+        <div class="studio-grid-2">
+          <div class="studio-field">
+            <label>Formato</label>
+            <select id="studioFormat">
+              <option value="story">Story 1080x1920</option>
+              <option value="post">Post 1080x1080</option>
+            </select>
+          </div>
 
-        <div class="studio-field">
-          <label>Template</label>
-          <select id="studioTemplate">
-            <option value="viral">Viral Roxo</option>
-            <option value="gold">Oferta Gold</option>
-            <option value="dark">Dark Premium</option>
-          </select>
+          <div class="studio-field">
+            <label>Template</label>
+            <select id="studioTemplate">
+              <option value="viral">Viral Roxo</option>
+              <option value="gold">Oferta Gold</option>
+              <option value="dark">Dark Premium</option>
+            </select>
+          </div>
         </div>
 
         <div class="studio-field">
@@ -42,14 +46,16 @@ window.initZyqenStudio = function(products = []){
           <input id="studioName" placeholder="Nome do produto">
         </div>
 
-        <div class="studio-field">
-          <label>Preço</label>
-          <input id="studioPrice" placeholder="Ex: 37,99">
-        </div>
+        <div class="studio-grid-2">
+          <div class="studio-field">
+            <label>Preço</label>
+            <input id="studioPrice" placeholder="Ex: 37,99">
+          </div>
 
-        <div class="studio-field">
-          <label>Preço antigo</label>
-          <input id="studioOldPrice" placeholder="Ex: 99,90">
+          <div class="studio-field">
+            <label>Preço antigo</label>
+            <input id="studioOldPrice" placeholder="Ex: 99,90">
+          </div>
         </div>
 
         <div class="studio-field">
@@ -68,13 +74,20 @@ window.initZyqenStudio = function(products = []){
         </div>
 
         <p class="studio-hint">
-          A imagem não é salva no Firebase. Ela é usada só para gerar o PNG no navegador.
+          A imagem não é salva no Firebase. Ela é usada apenas no navegador para gerar o PNG.
         </p>
 
       </div>
 
-      <div class="studio-preview-box">
-        <canvas id="studioCanvas" width="1080" height="1920"></canvas>
+      <div class="studio-preview-area">
+        <div class="studio-preview-top">
+          <strong>Pré-visualização</strong>
+          <span id="studioSizeText">Story 1080x1920</span>
+        </div>
+
+        <div class="studio-preview-box">
+          <canvas id="studioCanvas" width="1080" height="1920"></canvas>
+        </div>
       </div>
 
     </div>
@@ -90,12 +103,27 @@ window.initZyqenStudio = function(products = []){
   const tagInput = document.getElementById("studioTag");
   const previewBtn = document.getElementById("studioPreviewBtn");
   const downloadBtn = document.getElementById("studioDownloadBtn");
+  const sizeText = document.getElementById("studioSizeText");
   const canvas = document.getElementById("studioCanvas");
   const ctx = canvas.getContext("2d");
 
   function money(value){
     const clean = String(value || "").replace("R$","").trim();
     return clean ? `R$ ${clean}` : "R$ 0,00";
+  }
+
+  function roundRect(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
   }
 
   function wrapText(text, x, y, maxWidth, lineHeight){
@@ -135,7 +163,7 @@ window.initZyqenStudio = function(products = []){
     });
   }
 
-  function drawBackground(template, w, h){
+  function drawBackground(template,w,h){
     const gradient = ctx.createLinearGradient(0,0,w,h);
 
     if(template === "gold"){
@@ -144,21 +172,32 @@ window.initZyqenStudio = function(products = []){
       gradient.addColorStop(1,"#b8860b");
     }else if(template === "dark"){
       gradient.addColorStop(0,"#020202");
-      gradient.addColorStop(.5,"#111111");
-      gradient.addColorStop(1,"#272727");
+      gradient.addColorStop(.5,"#111");
+      gradient.addColorStop(1,"#292929");
     }else{
-      gradient.addColorStop(0,"#150022");
-      gradient.addColorStop(.5,"#05010d");
+      gradient.addColorStop(0,"#1c0030");
+      gradient.addColorStop(.5,"#070012");
       gradient.addColorStop(1,"#5b00ff");
     }
 
     ctx.fillStyle = gradient;
     ctx.fillRect(0,0,w,h);
 
-    ctx.globalAlpha = .22;
+    ctx.globalAlpha = .18;
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2;
+
+    for(let i = 0; i < 16; i++){
+      ctx.beginPath();
+      ctx.moveTo(-200,i * 160);
+      ctx.lineTo(w + 200,i * 160 - 280);
+      ctx.stroke();
+    }
+
+    ctx.globalAlpha = .18;
     ctx.fillStyle = "#ffffff";
 
-    for(let i = 0; i < 28; i++){
+    for(let i = 0; i < 34; i++){
       const x = Math.random() * w;
       const y = Math.random() * h;
       const r = Math.random() * 5 + 2;
@@ -170,17 +209,53 @@ window.initZyqenStudio = function(products = []){
     ctx.globalAlpha = 1;
   }
 
+  function drawProductImage(img,w,h,format){
+    if(!img){
+      ctx.fillStyle = "rgba(255,255,255,.08)";
+      roundRect(170,format === "post" ? 235 : 420,w - 340,360,34);
+      ctx.fill();
+
+      ctx.fillStyle = "#aaa";
+      ctx.font = "700 34px Poppins, Arial";
+      ctx.textAlign = "center";
+      ctx.fillText("Imagem do produto",w / 2,format === "post" ? 445 : 640);
+      ctx.textAlign = "left";
+      return;
+    }
+
+    const areaW = w * .82;
+    const areaH = format === "post" ? h * .38 : h * .35;
+
+    const ratio = Math.min(areaW / img.width, areaH / img.height);
+
+    const imgW = img.width * ratio;
+    const imgH = img.height * ratio;
+
+    const imgX = (w - imgW) / 2;
+    const imgY = format === "post" ? 250 : 430;
+
+    ctx.shadowColor = "rgba(0,0,0,.65)";
+    ctx.shadowBlur = 45;
+    ctx.shadowOffsetY = 28;
+
+    ctx.drawImage(img,imgX,imgY,imgW,imgH);
+
+    ctx.shadowColor = "transparent";
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetY = 0;
+  }
+
   async function renderStudio(){
     const format = formatInput.value;
     const template = templateInput.value;
 
-    const w = format === "post" ? 1080 : 1080;
+    const w = 1080;
     const h = format === "post" ? 1080 : 1920;
 
     canvas.width = w;
     canvas.height = h;
 
-    drawBackground(template,w,h);
+    sizeText.textContent = format === "post" ? "Post 1080x1080" : "Story 1080x1920";
 
     const name = nameInput.value || "Produto Viral";
     const price = money(priceInput.value || "37,99");
@@ -188,84 +263,54 @@ window.initZyqenStudio = function(products = []){
     const tag = tagInput.value || "PRODUTO VIRAL";
     const imageUrl = imageInput.value;
 
-    const productImg = await loadImage(imageUrl);
+    drawBackground(template,w,h);
 
-    ctx.fillStyle = "rgba(255,255,255,.10)";
-    ctx.roundRect(70,70,w - 140,h - 140,42);
+    ctx.fillStyle = "rgba(255,255,255,.09)";
+    roundRect(70,70,w - 140,h - 140,42);
     ctx.fill();
 
-    ctx.fillStyle = template === "gold" ? "#ffd86b" : "#ffffff";
-    ctx.font = "800 48px Poppins, Arial";
-    ctx.fillText("ZYQEN",90,135);
-
-    ctx.fillStyle = template === "gold" ? "#111" : "#fff";
-    ctx.fillStyle = "#ffd86b";
-    ctx.font = "800 34px Poppins, Arial";
-    ctx.fillText(tag.toUpperCase(),90,205);
-
-    if(productImg){
-      const imgMaxW = w * .76;
-      const imgMaxH = h * .38;
-
-      const ratio = Math.min(
-        imgMaxW / productImg.width,
-        imgMaxH / productImg.height
-      );
-
-      const imgW = productImg.width * ratio;
-      const imgH = productImg.height * ratio;
-
-      const imgX = (w - imgW) / 2;
-      const imgY = format === "post" ? 250 : 420;
-
-      ctx.shadowColor = "rgba(0,0,0,.55)";
-      ctx.shadowBlur = 45;
-      ctx.shadowOffsetY = 28;
-      ctx.drawImage(productImg,imgX,imgY,imgW,imgH);
-      ctx.shadowColor = "transparent";
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetY = 0;
-    }else{
-      ctx.fillStyle = "rgba(255,255,255,.08)";
-      ctx.roundRect(170,format === "post" ? 250 : 480,w - 340,360,34);
-      ctx.fill();
-
-      ctx.fillStyle = "#aaa";
-      ctx.font = "600 34px Poppins, Arial";
-      ctx.textAlign = "center";
-      ctx.fillText("Imagem do produto",w / 2,format === "post" ? 450 : 680);
-      ctx.textAlign = "left";
-    }
-
-    const baseY = format === "post" ? 720 : 1250;
-
     ctx.fillStyle = "#fff";
-    ctx.font = "900 68px Poppins, Arial";
-    wrapText(name,90,baseY,w - 180,78);
+    ctx.font = "900 56px Poppins, Arial";
+    ctx.fillText("ZYQEN",90,145);
+
+    ctx.fillStyle = "#ffd86b";
+    ctx.font = "900 38px Poppins, Arial";
+    ctx.fillText(tag.toUpperCase(),90,215);
+
+    const productImg = await loadImage(imageUrl);
+    drawProductImage(productImg,w,h,format);
+
+    const baseY = format === "post" ? 705 : 1225;
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "900 70px Poppins, Arial";
+    wrapText(name.toUpperCase(),90,baseY,w - 180,78);
 
     ctx.fillStyle = "#aaa";
     ctx.font = "700 38px Poppins, Arial";
     ctx.fillText(`De ${oldPrice}`,90,baseY + 175);
 
-    ctx.strokeStyle = "#ff5757";
-    ctx.lineWidth = 6;
+    ctx.strokeStyle = "#ff3131";
+    ctx.lineWidth = 7;
     ctx.beginPath();
     ctx.moveTo(90,baseY + 160);
-    ctx.lineTo(330,baseY + 160);
+    ctx.lineTo(350,baseY + 160);
     ctx.stroke();
 
     ctx.fillStyle = "#ffd86b";
-    ctx.font = "900 94px Poppins, Arial";
-    ctx.fillText(price,90,baseY + 280);
+    ctx.font = "900 106px Poppins, Arial";
+    ctx.fillText(price,90,baseY + 300);
 
-    ctx.fillStyle = template === "gold" ? "#ffd86b" : "#a855ff";
-    ctx.roundRect(90,baseY + 360,w - 180,92,26);
+    const btnColor = template === "gold" ? "#ffd86b" : "#a855ff";
+
+    ctx.fillStyle = btnColor;
+    roundRect(90,baseY + 380,w - 180,96,28);
     ctx.fill();
 
     ctx.fillStyle = "#111";
-    ctx.font = "900 36px Poppins, Arial";
+    ctx.font = "900 38px Poppins, Arial";
     ctx.textAlign = "center";
-    ctx.fillText("COMPRAR AGORA",w / 2,baseY + 420);
+    ctx.fillText("COMPRAR AGORA",w / 2,baseY + 442);
     ctx.textAlign = "left";
   }
 
@@ -305,7 +350,7 @@ window.initZyqenStudio = function(products = []){
       link.href = canvas.toDataURL("image/png");
       link.click();
     }catch(error){
-      alert("Não foi possível baixar. Tente usar uma imagem com link direto ou hospedada no seu Firebase.");
+      alert("Não foi possível baixar. Use imagem com link direto ou hospedada no Firebase.");
     }
   });
 
