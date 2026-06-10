@@ -385,6 +385,7 @@ body{
 .info p{
   color:#b5b5b5;
   font-size:15px;
+  font-weight:800;
 }
 
 /* SETA */
@@ -493,8 +494,9 @@ body{
 
 .square-info p{
   color:#cfcfcf;
-  font-size:14px;
+  font-size:17px;
   margin-bottom:14px;
+  font-weight:999;
 }
 
 .buy-btn{
