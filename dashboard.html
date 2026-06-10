@@ -12,17 +12,16 @@
              user-scalable=no,
              viewport-fit=cover">
 
-  <title>MT Admin Dashboard</title>
+  <title>Zyqen Admin Dashboard</title>
 
   <link rel="manifest" href="manifest-admin.json">
-
-<link rel="icon" type="image/png" href="Icones/Image/MTADMIN2.png">
-<link rel="apple-touch-icon" href="Icones/Image/MTADMIN2.png">
+  <link rel="icon" type="image/png" href="Icones/Image/Z.png">
+  <link rel="apple-touch-icon" href="Icones/Image/Z.png">
 
   <meta name="theme-color" content="#070707">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="MT Admin">
+  <meta name="apple-mobile-web-app-title" content="Zyqen Admin">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,6 +36,7 @@
       padding:0;
       box-sizing:border-box;
       -webkit-tap-highlight-color:transparent;
+      touch-action:manipulation;
     }
 
     :root{
@@ -58,7 +58,7 @@
       overflow-x:hidden;
       -webkit-text-size-adjust:100%;
       text-size-adjust:100%;
-      overscroll-behavior:auto;
+      overscroll-behavior:none;
     }
 
     body{
@@ -71,7 +71,7 @@
       min-height:100vh;
       min-height:100dvh;
       overflow-x:hidden;
-      overscroll-behavior:auto;
+      overscroll-behavior:none;
     }
 
     body::before{
@@ -129,7 +129,7 @@
       width:54px;
       height:54px;
       border-radius:18px;
-      background:rgba(255,255,255,.035);
+      background:linear-gradient(135deg,rgba(255,216,107,.18),rgba(184,134,11,.06));
       border:1px solid rgba(255,216,107,.32);
       display:flex;
       align-items:center;
@@ -140,14 +140,6 @@
       box-shadow:0 0 28px rgba(255,216,107,.12);
       flex-shrink:0;
       user-select:none;
-      overflow:hidden;
-    }
-
-    .brand-icon img{
-      width:100%;
-      height:100%;
-      object-fit:contain;
-      display:block;
     }
 
     .brand h1{
@@ -220,14 +212,6 @@
       color:var(--gold);
       font-weight:800;
       flex-shrink:0;
-      overflow:hidden;
-      background:rgba(255,255,255,.035);
-    }
-
-    .admin-mini img{
-      width:100%;
-      height:100%;
-      object-fit:contain;
     }
 
     .admin-email{
@@ -594,7 +578,7 @@
       display:none;
     }
 
-    @media(max-width:720px){
+    @media(max-width:1100px){
       .dashboard{
         grid-template-columns:1fr;
       }
@@ -969,9 +953,9 @@
     <div>
       <div class="drawer-head">
         <div class="brand" style="margin-bottom:0;">
-          <div class="brand-icon"><img src="Icones/Image/MTADMIN2.png" alt="MT Admin" draggable="false"></div>
+          <div class="brand-icon">Z</div>
           <div>
-            <h1>MT ADMIN</h1>
+            <h1>ZYQEN</h1>
             <span>ADMIN</span>
           </div>
         </div>
@@ -980,7 +964,7 @@
       </div>
 
       <div class="drawer-user">
-        <strong>MT Admin</strong>
+        <strong>Zyqen Admin</strong>
         <span id="drawerEmail">admin</span>
       </div>
 
@@ -1000,10 +984,10 @@
     <aside>
       <div>
         <div class="brand">
-          <div class="brand-icon"><img src="Icones/Image/MTADMIN2.png" alt="MT Admin" draggable="false"></div>
+          <div class="brand-icon">Z</div>
           <div>
-            <h1>MT ADMIN</h1>
-            <span>VAREJÃO</span>
+            <h1>ZYQEN</h1>
+            <span>DASHBOARD</span>
           </div>
         </div>
 
@@ -1019,8 +1003,8 @@
       <div>
         <div class="admin-box">
           <div class="admin-name">
-            <div class="admin-mini"><img src="Icones/Image/MTADMIN2.png" alt="MT" draggable="false"></div>
-            <div>MT Admin</div>
+            <div class="admin-mini">Z</div>
+            <div>Zyqen Admin</div>
           </div>
           <div class="admin-email" id="adminEmail">admin</div>
         </div>
@@ -1035,7 +1019,7 @@
 
         <div class="page-title">
           <h2>Produtos</h2>
-          <p>Gerencie os produtos do MT Varejão</p>
+          <p>Gerencie os produtos da sua página</p>
         </div>
 
         <div class="top-actions">
@@ -1048,7 +1032,7 @@
               draggable="false">
           </button>
 
-          <div class="brand-icon" style="width:52px;height:52px;font-size:24px;"><img src="Icones/Image/MTADMIN2.png" alt="MT Admin" draggable="false"></div>
+          <div class="brand-icon" style="width:52px;height:52px;font-size:24px;">Z</div>
         </div>
       </div>
 
@@ -1219,7 +1203,7 @@
       currentPage = "settings";
       setActivePage("settings");
       pageTitle.textContent = "Configurações";
-      pageSubtitle.textContent = "Ajustes do MT Admin";
+      pageSubtitle.textContent = "Ajustes do painel";
       searchInput.style.display = "none";
       contentGrid.className = "content-grid single-grid";
 
@@ -1259,14 +1243,14 @@
       currentPage = "studio";
       setActivePage("studio");
       pageTitle.textContent = "Studio";
-      pageSubtitle.textContent = "Crie artes para o MT Varejão";
+      pageSubtitle.textContent = "Crie artes para postar";
       searchInput.style.display = "none";
       contentGrid.className = "content-grid single-grid";
 
       contentGrid.innerHTML = `
         <section class="card">
           <div class="card-header">
-            <div class="card-title">🎨 MT Studio</div>
+            <div class="card-title">🎨 Zyqen Studio</div>
           </div>
 
           <div id="studioRoot"></div>
@@ -1290,7 +1274,7 @@
       currentPage = "products";
       setActivePage("products");
       pageTitle.textContent = "Produtos";
-      pageSubtitle.textContent = "Gerencie os produtos do MT Varejão";
+      pageSubtitle.textContent = "Gerencie sua página";
       searchInput.style.display = "block";
       contentGrid.className = "content-grid";
 
@@ -1534,6 +1518,22 @@
       }
     });
 
+    document.addEventListener("gesturestart", (e) => e.preventDefault());
+    document.addEventListener("gesturechange", (e) => e.preventDefault());
+    document.addEventListener("gestureend", (e) => e.preventDefault());
+
+    let lastTouchEnd = 0;
+
+    document.addEventListener("touchend", (e) => {
+      const now = Date.now();
+
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+
+      lastTouchEnd = now;
+    }, { passive:false });
+
     let deferredPrompt = null;
 
     const installBtn = document.getElementById("installBtn");
@@ -1589,6 +1589,13 @@
     }
   </script>
 
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js");
+      });
+    }
+  </script>
 
 </body>
 </html>
